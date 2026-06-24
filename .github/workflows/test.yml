@@ -5,13 +5,18 @@ on:
     branches: [main]
   pull_request:
 
+# Three independent jobs run in parallel:
+#   bash    — Bats (sh) on Linux + macOS  (macOS also proves bash 3.2 compatibility)
+#   powershell — Pester (ps) on Windows
+#   parity  — cross-platform JSON equality; needs BOTH interpreters, so it gets its
+#             own Linux job where bash + PowerShell install cleanly.
 jobs:
   bash:
     name: Bats (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]   # macOS proves bash 3.2 compatibility
+        os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -22,25 +27,8 @@ jobs:
           else
             sudo apt-get update && sudo apt-get install -y bats
           fi
-      - name: Ensure PowerShell is available (needed by the parity suite)
-        shell: bash
-        run: |
-          if ! command -v pwsh >/dev/null 2>&1; then
-            if [ "$RUNNER_OS" = "macOS" ]; then
-              brew install --cask powershell
-            else
-              sudo apt-get install -y powershell || {
-                # Fallback: install from Microsoft package repo if not in default apt
-                wget -q "https://github.com/PowerShell/PowerShell/releases/latest/download/powershell-lts_amd64.deb" -O /tmp/pwsh.deb || true
-                sudo dpkg -i /tmp/pwsh.deb || sudo apt-get install -f -y
-              }
-            fi
-          fi
-          pwsh --version
       - name: Run load-config Bats suite
         run: bats tests/bash/load-config.bats
-      - name: Run cross-platform parity suite
-        run: bats tests/parity/parity.bats
 
   powershell:
     name: Pester (windows-latest)
@@ -59,3 +47,21 @@ jobs:
           $cfg.TestDrive.Enabled = $false
           $cfg.Output.Verbosity = 'Detailed'
           Invoke-Pester -Configuration $cfg
+
+  parity:
+    name: Cross-platform parity (ubuntu-latest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Bats + PowerShell
+        run: |
+          sudo apt-get update && sudo apt-get install -y bats
+          if ! command -v pwsh >/dev/null 2>&1; then
+            sudo apt-get install -y powershell || {
+              wget -q "https://github.com/PowerShell/PowerShell/releases/latest/download/powershell-lts_amd64.deb" -O /tmp/pwsh.deb
+              sudo dpkg -i /tmp/pwsh.deb || sudo apt-get install -f -y
+            }
+          fi
+          pwsh --version
+      - name: Run cross-platform parity suite
+        run: bats tests/parity/parity.bats

@@ -23,8 +23,10 @@ BeforeAll {
     $script:PROD_SCRIPT   = Join-Path $script:REPO_ROOT 'scripts/powershell/load-config.ps1'
     $script:FIXTURES_DIR  = Join-Path $script:REPO_ROOT 'tests/bash/fixtures'
 
-    # Use sandbox-allowed TMPDIR (not /tmp directly, which is blocked by the sandbox).
-    $script:SUITE_TMP     = Join-Path $env:TMPDIR "pester_load_config_$(New-Guid)"
+    # Cross-platform temp dir: GetTempPath() returns the per-user $TMPDIR on macOS
+    # (sandbox-allowed), %TEMP% on Windows, and /tmp on Linux. Do NOT use $env:TMPDIR
+    # directly — it is null on Windows and breaks Join-Path there.
+    $script:SUITE_TMP     = Join-Path ([System.IO.Path]::GetTempPath()) "pester_load_config_$(New-Guid)"
     $null = New-Item -ItemType Directory -Path $script:SUITE_TMP -Force
 
     # Built-in defaults
