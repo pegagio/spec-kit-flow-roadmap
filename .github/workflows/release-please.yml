@@ -1,0 +1,21 @@
+name: release-please
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        with:
+          # Uses release-please-config.json + .release-please-manifest.json at the repo root.
+          # The manifest is seeded at 0.1.0 so the first release continues from there
+          # (rather than proposing 1.0.0), and extra-files bumps extension.yml's
+          # extension.version on each release.
+          token: ${{ secrets.GITHUB_TOKEN }}
