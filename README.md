@@ -57,13 +57,17 @@ write them.
 
 ## Install
 
-This extension isn't in the spec-kit community catalog yet, so install it directly from this
-repository.
-
-From the Git repository:
+This extension is in the spec-kit community catalog, so install it by name:
 
 ```bash
-specify extension add --from https://github.com/srobroek/speckit-roadmap
+specify extension add roadmap
+specify extension enable roadmap
+```
+
+To pin a specific release instead, install from its archive:
+
+```bash
+specify extension add --from https://github.com/srobroek/speckit-roadmap/archive/refs/tags/v0.1.0.zip
 specify extension enable roadmap
 ```
 
