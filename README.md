@@ -1,4 +1,4 @@
-# Diagram Roadmap Kit
+# Diagram Roadmap
 
 A [GitHub Spec Kit](https://github.com/github/spec-kit) extension that adds a **spec
 roadmap** to the workflow: written after the constitution, and reviewed before and after
@@ -7,7 +7,7 @@ each spec is implemented.
 ```
 constitution → ROADMAP → specify → plan → tasks → [brief] → implement → [debrief]
                  │                              read-only       read-only
-            roadmap.write                   roadmap.sync — reconcile on demand
+     speckit.diagram-roadmap.write   speckit.diagram-roadmap.sync — reconcile on demand
 ```
 
 ## Why
@@ -24,17 +24,17 @@ you decided about it earlier is gone — so you re-derive it, or contradict it.
 The roadmap holds onto it. It's a living, project-level file next to the constitution that
 records what each planned spec is for, what's in and out of scope, what it depends on, and
 which decisions govern it — including specs that don't exist yet. When you start one,
-`roadmap.brief` shows you what you'd decided; after you build it, `roadmap.debrief` checks
-the result against that.
+`speckit.diagram-roadmap.brief` shows you what you'd decided; after you build it, `speckit.diagram-roadmap.debrief`
+checks the result against that.
 
 ## Commands
 
 | Command | When | What it does |
 |---------|------|--------------|
-| `speckit.roadmap.write` | after `/speckit.constitution` (hook) | Create or amend the roadmap. Pulls from the constitution, ADRs, PRDs, the current session, and prior notes; asks about gaps; writes a versioned roadmap with a changelog. Detects create vs. amend automatically. |
-| `speckit.roadmap.brief` | before `/speckit.implement` (hook) | Read-only. Surfaces the roadmap's record for the spec you're about to build (outcome, scope, governing decisions, dependencies) and flags anything that has already drifted. |
-| `speckit.roadmap.debrief` | after `/speckit.implement` (hook) | Read-only. Compares what you built against the roadmap entry; classifies any drift; proposes marking the entry `verified`. |
-| `speckit.roadmap.sync` | on demand | Read-only. Reconciles the whole roadmap against the specs on disk: orphans, phantom entries, status drift, broken dependencies. |
+| `speckit.diagram-roadmap.write` | after `/speckit.constitution` (hook) | Create or amend the roadmap. Pulls from the constitution, ADRs, PRDs, the current session, and prior notes; asks about gaps; writes a versioned roadmap with a changelog. Detects create vs. amend automatically. |
+| `speckit.diagram-roadmap.brief` | before `/speckit.implement` (hook) | Read-only. Surfaces the roadmap's record for the spec you're about to build (outcome, scope, governing decisions, dependencies) and flags anything that has already drifted. |
+| `speckit.diagram-roadmap.debrief` | after `/speckit.implement` (hook) | Read-only. Compares what you built against the roadmap entry; classifies any drift; proposes marking the entry `verified`. |
+| `speckit.diagram-roadmap.sync` | on demand | Read-only. Reconciles the whole roadmap against the specs on disk: orphans, phantom entries, status drift, broken dependencies. |
 
 `brief`, `debrief`, and `sync` are read-only — they write a report and *propose* changes.
 Only `write` edits the roadmap, and it never deletes content (superseded entries are marked,
@@ -60,9 +60,9 @@ write them.
 This extension is not in the spec-kit community catalog, so it must be installed from a local checkout:
 
 ```bash
-git clone https://github.com/pegagio/diagram-roadmap-kit
-specify extension add ./diagram-roadmap-kit --dev
-specify extension enable diagram-roadmap-kit
+git clone https://github.com/pegagio/spec-kit-diagram-roadmap
+specify extension add ./spec-kit-diagram-roadmap --dev
+specify extension enable diagram-roadmap
 ```
 
 If you're developing this extension *inside* a spec-kit project, install from a copy of the
@@ -71,10 +71,24 @@ source rather than the repo root — installing a directory into its own
 
 Requires spec-kit `>= 1.0.0`.
 
+## Migrating an existing local installation
+
+The `diagram-roadmap` identity is a clean break from the former `roadmap` extension. Preserve the existing configuration, remove the old extension, install the renamed source, compare the preserved values with the new scaffold, and enable the new identity:
+
+```bash
+specify extension remove roadmap --keep-config
+specify extension add /path/to/spec-kit-diagram-roadmap --dev
+diff -u .specify/extensions/diagram-roadmap/roadmap-config.yml .specify/extensions/roadmap/roadmap-config.yml
+cp .specify/extensions/roadmap/roadmap-config.yml .specify/extensions/diagram-roadmap/roadmap-config.yml
+specify extension enable diagram-roadmap
+```
+
+Run the `cp` step only after reviewing the diff. Once the renamed commands and configuration are verified, the preserved `.specify/extensions/roadmap/` directory can be removed deliberately.
+
 ## Configuration
 
-Copy `config-template.yml` to `.specify/extensions/roadmap/roadmap-config.yml` and edit.
-Everything is optional; `SPECKIT_ROADMAP_*` environment variables override the file.
+Copy `config-template.yml` to `.specify/extensions/diagram-roadmap/roadmap-config.yml` and edit.
+Everything is optional; `SPECKIT_DIAGRAM_ROADMAP_*` environment variables override the file.
 
 | Key | Default | Meaning |
 |-----|---------|---------|
@@ -105,16 +119,16 @@ pwsh -NoProfile -Command "Invoke-Pester -Path tests/powershell/load-config.Tests
 
 ## Project Origins
 
-Diagram Roadmap Kit is an independent derivative of [speckit-roadmap](https://github.com/srobroek/speckit-roadmap), originally created and maintained by [srobroek](https://github.com/srobroek).
+Diagram Roadmap is an independent derivative of [speckit-roadmap](https://github.com/srobroek/speckit-roadmap), originally created and maintained by [srobroek](https://github.com/srobroek).
 
 This project began from the `speckit-roadmap` codebase and preserves its original Git history so that the authorship and development history of the inherited work remain intact.
 
-Diagram Roadmap Kit is maintained as an independent project and is not intended to remain compatible with `speckit-roadmap`. Future upstream development may be reviewed for ideas, fixes, or other useful developments, but upstream changes are not expected to be merged directly.
+Diagram Roadmap is maintained as an independent project and is not intended to remain compatible with `speckit-roadmap`. Future upstream development may be reviewed for ideas, fixes, or other useful developments, but upstream changes are not expected to be merged directly.
 
-The original project and its contributors retain authorship and copyright in their respective contributions. Subsequent modifications and original work in Diagram Roadmap Kit are authored by this project's contributors.
+The original project and its contributors retain authorship and copyright in their respective contributions. Subsequent modifications and original work in Diagram Roadmap are authored by this project's contributors.
 
 ## License
 
 Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE).
 
-Diagram Roadmap Kit contains work derived from `speckit-roadmap`, also licensed under Apache-2.0.
+Diagram Roadmap contains work derived from `speckit-roadmap`, also licensed under Apache-2.0.

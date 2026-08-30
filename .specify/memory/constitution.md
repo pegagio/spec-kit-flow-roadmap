@@ -19,13 +19,13 @@ Templates requiring review:
 
 Deferred / TODO: none.
 
-Project note: this repository BUILDS a spec-kit extension (`speckit-roadmap`).
+Project note: this repository BUILDS the Diagram Roadmap spec-kit extension (`diagram-roadmap`).
 The principles below govern how that extension is designed, built, and packaged.
 -->
 
-# speckit-roadmap Constitution
+# Diagram Roadmap Constitution
 
-`speckit-roadmap` is a GitHub spec-kit extension. It inserts a **roadmap** step
+Diagram Roadmap is a GitHub spec-kit extension. It inserts a **roadmap** step
 immediately after `/speckit.constitution` — capturing the spec-specific topics,
 technology choices, outcomes, constraints, milestones, and scope discussed during
 the constitution and grilling phases so they are not lost — and adds a

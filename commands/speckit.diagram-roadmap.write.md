@@ -1,8 +1,8 @@
 ---
 description: Create or amend the project spec roadmap after the constitution — capturing spec-specific decisions, outcomes, constraints, and the intent of specs not yet written so they are not lost.
 scripts:
-  sh: .specify/extensions/roadmap/scripts/bash/load-config.sh
-  ps: .specify/extensions/roadmap/scripts/powershell/load-config.ps1
+  sh: .specify/extensions/diagram-roadmap/scripts/bash/load-config.sh
+  ps: .specify/extensions/diagram-roadmap/scripts/powershell/load-config.ps1
 ---
 
 ## User Input
@@ -70,7 +70,7 @@ the template; if it exists, amend it non-destructively and bump its version.
 4. **Branch on `roadmap_exists`:**
 
    **If it does NOT exist (create):**
-   - Load `.specify/extensions/roadmap/templates/roadmap-template.md` as the
+   - Load `.specify/extensions/diagram-roadmap/templates/roadmap-template.md` as the
      structure.
    - Pre-fill Vision & End States, Constraints & Decisions, and the Planned Specs
      ledger from harvested context.

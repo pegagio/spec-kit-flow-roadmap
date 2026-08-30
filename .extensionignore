@@ -1,0 +1,23 @@
+# Install only the reviewed runtime payload.
+**
+!extension.yml
+!LICENSE
+!config-template.yml
+!commands/**
+commands/*
+!commands/speckit.diagram-roadmap.write.md
+!commands/speckit.diagram-roadmap.brief.md
+!commands/speckit.diagram-roadmap.debrief.md
+!commands/speckit.diagram-roadmap.sync.md
+!templates/**
+templates/*
+!templates/roadmap-template.md
+!templates/review-report-template.md
+!scripts/**
+scripts/*
+!scripts/bash/**
+scripts/bash/*
+!scripts/bash/load-config.sh
+!scripts/powershell/**
+scripts/powershell/*
+!scripts/powershell/load-config.ps1

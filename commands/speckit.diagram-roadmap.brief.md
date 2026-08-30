@@ -1,8 +1,8 @@
 ---
 description: Read-only pre-implementation briefing — surface what the roadmap expects for the spec about to be implemented (outcome, scope, governing decisions, dependencies) and flag pre-implementation drift.
 scripts:
-  sh: .specify/extensions/roadmap/scripts/bash/load-config.sh
-  ps: .specify/extensions/roadmap/scripts/powershell/load-config.ps1
+  sh: .specify/extensions/diagram-roadmap/scripts/bash/load-config.sh
+  ps: .specify/extensions/diagram-roadmap/scripts/powershell/load-config.ps1
 ---
 
 ## User Input
@@ -26,7 +26,7 @@ and flag any way the spec has already drifted from what the roadmap anticipated.
   only output is a briefing report written under the active feature's
   `roadmap-reviews/` directory.
 - **Do not mutate status.** If the entry should move to `in-progress`, **instruct** the
-  user to do so via `/speckit.roadmap.write`; never write the status yourself.
+  user to do so via `/speckit.diagram-roadmap.write`; never write the status yourself.
 - **No new judgment in scripts.** This command reuses the already-tested `load-config`
   and core `check-prerequisites`; it adds no deterministic logic of its own.
 
@@ -40,7 +40,7 @@ and flag any way the spec has already drifted from what the roadmap anticipated.
 
 2. **Graceful preconditions:**
    - If `roadmap_exists` is false → report that no roadmap exists and suggest
-     `/speckit.roadmap.write`. Stop.
+     `/speckit.diagram-roadmap.write`. Stop.
    - If no active feature can be resolved → ask the user which spec to brief (do not
      guess).
 
@@ -50,7 +50,7 @@ and flag any way the spec has already drifted from what the roadmap anticipated.
    2. else by title similarity,
    3. else by number.
    If no entry matches → report that the spec is not on the roadmap and suggest adding it
-   via `/speckit.roadmap.write`. Stop (do not invent an entry). If the match is
+   via `/speckit.diagram-roadmap.write`. Stop (do not invent an entry). If the match is
    **ambiguous** (multiple plausible entries, e.g. similar titles) → list the candidates
    and ask the user which entry to brief; do not guess.
 
@@ -67,13 +67,13 @@ and flag any way the spec has already drifted from what the roadmap anticipated.
    💡 Recommendation / 🤔 Question.
 
 6. **Write the report** to `FEATURE_DIR/roadmap-reviews/brief-{timestamp}.md` using
-   `.specify/extensions/roadmap/templates/review-report-template.md` as the structure
+   `.specify/extensions/diagram-roadmap/templates/review-report-template.md` as the structure
    (kind = "Pre-Implementation Brief"). Include the Surfaced Context, Findings table,
    Findings Summary, a verdict (✅ PROCEED / ⚠️ PROCEED WITH UPDATES / 🛑 RETHINK), and
    Recommended Actions. Create the `roadmap-reviews/` directory if needed; never
    overwrite a prior report (the timestamp keeps each distinct).
 
 7. **Recommend the status transition** to `in-progress` in the Recommended Actions
-   (instruction only — "apply via `/speckit.roadmap.write`"). Do not apply it.
+   (instruction only — "apply via `/speckit.diagram-roadmap.write`"). Do not apply it.
 
 8. **Report** the verdict and the report path to the user.

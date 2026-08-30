@@ -1,8 +1,8 @@
 ---
 description: Read-only post-implementation review — check the implemented spec against its roadmap entry's outcome and scope, classify any drift, and propose marking the entry verified.
 scripts:
-  sh: .specify/extensions/roadmap/scripts/bash/load-config.sh
-  ps: .specify/extensions/roadmap/scripts/powershell/load-config.ps1
+  sh: .specify/extensions/diagram-roadmap/scripts/bash/load-config.sh
+  ps: .specify/extensions/diagram-roadmap/scripts/powershell/load-config.ps1
 ---
 
 ## User Input
@@ -37,7 +37,7 @@ wrong" from "the roadmap is stale."
    `.specify/scripts/bash/check-prerequisites.sh --json --paths-only` script.
 
 2. **Graceful preconditions:**
-   - If `roadmap_exists` is false → report that and suggest `/speckit.roadmap.write`. Stop.
+   - If `roadmap_exists` is false → report that and suggest `/speckit.diagram-roadmap.write`. Stop.
    - If no active feature resolves → ask which spec to debrief (do not guess).
 
 3. **Match the implemented spec to its ledger entry** (spec-dir → title → number,
@@ -55,11 +55,11 @@ wrong" from "the roadmap is stale."
    - **constraint-violation** — breaks a `governed-by` constraint/ADR → always 🎯 Must-Address.
    - **roadmap-stale** — the implementation is correct but the entry no longer reflects what
      was actually decided; the **roadmap** is wrong, not the spec. Classify it this way and
-     propose amending the roadmap via `/speckit.roadmap.write`; do NOT report the
+     propose amending the roadmap via `/speckit.diagram-roadmap.write`; do NOT report the
      implementation as defective.
 
 6. **Write the report** to `FEATURE_DIR/roadmap-reviews/debrief-{timestamp}.md` using
-   `.specify/extensions/roadmap/templates/review-report-template.md` (kind =
+   `.specify/extensions/diagram-roadmap/templates/review-report-template.md` (kind =
    "Post-Implementation Debrief"): Surfaced Context, classified Findings table, Findings
    Summary (capped at the configured `max_findings`; aggregate overflow), a verdict
    (✅ PROCEED / ⚠️ PROCEED WITH UPDATES / 🛑 RETHINK), and Recommended Actions. Create
@@ -68,6 +68,6 @@ wrong" from "the roadmap is stale."
 7. **Propose the status transition** in Recommended Actions: propose `verified` **only when
    the outcome is met AND there are no 🎯 Must-Address findings**; otherwise do not propose
    verified (note a lesser status or none). Instruction only — applied via
-   `/speckit.roadmap.write`.
+   `/speckit.diagram-roadmap.write`.
 
 8. **Report** the verdict and the report path to the user.

@@ -16,7 +16,7 @@
 #   roadmap-config.yml we:
 #     1. Build a mini repo under $BATS_TEST_TMPDIR with a .specify/ directory.
 #     2. Copy load-config.sh into a scripts/bash/ path inside that tree.
-#     3. Copy the desired fixture as .specify/extensions/roadmap/roadmap-config.yml.
+#     3. Copy the desired fixture as .specify/extensions/diagram-roadmap/roadmap-config.yml.
 #     4. Run the COPY of the script, which finds the local .specify/ root.
 #   This keeps every test hermetic and CWD-independent.
 #
@@ -45,7 +45,7 @@ DEFAULT_MAX_FINDINGS=50
 # Sets global FAKE_ROOT to the repo root.
 _build_fake_repo() {
     FAKE_ROOT="$BATS_TEST_TMPDIR/repo"
-    mkdir -p "$FAKE_ROOT/.specify/extensions/roadmap"
+    mkdir -p "$FAKE_ROOT/.specify/extensions/diagram-roadmap"
     mkdir -p "$FAKE_ROOT/.specify/scripts/bash"
     mkdir -p "$FAKE_ROOT/scripts/bash"
     # Copy load-config.sh so _find_specify_root (walks up from SCRIPT_DIR) finds FAKE_ROOT
@@ -60,7 +60,7 @@ _build_fake_repo() {
 _install_fixture() {
     local name="$1"
     cp "$(cd -- "$(dirname -- "$BATS_TEST_FILENAME")" && pwd)/fixtures/${name}" \
-       "$FAKE_ROOT/.specify/extensions/roadmap/roadmap-config.yml"
+       "$FAKE_ROOT/.specify/extensions/diagram-roadmap/roadmap-config.yml"
 }
 
 # Run the copy of load-config.sh inside FAKE_ROOT (stdout+stderr merged into $output).
@@ -218,7 +218,7 @@ assert val in arr, f'{val!r} not in {arr}'
 
 @test "T011e: null-sentinel — null value for path falls through to built-in default" {
     _build_fake_repo
-    printf 'roadmap:\n  path: null\n' > "$FAKE_ROOT/.specify/extensions/roadmap/roadmap-config.yml"
+    printf 'roadmap:\n  path: null\n' > "$FAKE_ROOT/.specify/extensions/diagram-roadmap/roadmap-config.yml"
     _run_script
     [ "$status" -eq 0 ]
     [ "$(_json_field "$output" "roadmap_path")" = "$DEFAULT_ROADMAP_PATH" ]
@@ -226,54 +226,54 @@ assert val in arr, f'{val!r} not in {arr}'
 
 @test "T011f: null-sentinel — tilde (~) value for path falls through to built-in default" {
     _build_fake_repo
-    printf 'roadmap:\n  path: ~\n' > "$FAKE_ROOT/.specify/extensions/roadmap/roadmap-config.yml"
+    printf 'roadmap:\n  path: ~\n' > "$FAKE_ROOT/.specify/extensions/diagram-roadmap/roadmap-config.yml"
     _run_script
     [ "$status" -eq 0 ]
     [ "$(_json_field "$output" "roadmap_path")" = "$DEFAULT_ROADMAP_PATH" ]
 }
 
 # ---------------------------------------------------------------------------
-# T012: env-override — SPECKIT_ROADMAP_* wins over file AND defaults
+# T012: env-override — SPECKIT_DIAGRAM_ROADMAP_* wins over file AND defaults
 # ---------------------------------------------------------------------------
 
-@test "T012: env-override — SPECKIT_ROADMAP_PATH wins over file value" {
+@test "T012: env-override — SPECKIT_DIAGRAM_ROADMAP_PATH wins over file value" {
     _build_fake_repo
     _install_fixture "env.yml"   # env.yml sets path to docs/env-test-roadmap.md
-    SPECKIT_ROADMAP_PATH="custom/env-roadmap.md" _run_script
+    SPECKIT_DIAGRAM_ROADMAP_PATH="custom/env-roadmap.md" _run_script
     [ "$status" -eq 0 ]
     [ "$(_json_field "$output" "roadmap_path")" = "custom/env-roadmap.md" ]
 }
 
-@test "T012b: env-override — SPECKIT_ROADMAP_ADR_DIR wins over defaults" {
+@test "T012b: env-override — SPECKIT_DIAGRAM_ROADMAP_ADR_DIR wins over defaults" {
     _build_fake_repo
-    SPECKIT_ROADMAP_ADR_DIR="my/adr/" _run_script
+    SPECKIT_DIAGRAM_ROADMAP_ADR_DIR="my/adr/" _run_script
     [ "$status" -eq 0 ]
     [ "$(_json_field "$output" "adr_dir")" = "my/adr/" ]
 }
 
-@test "T012c: env-override — SPECKIT_ROADMAP_MAX_FINDINGS wins over defaults" {
+@test "T012c: env-override — SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS wins over defaults" {
     _build_fake_repo
-    SPECKIT_ROADMAP_MAX_FINDINGS=99 _run_script
+    SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS=99 _run_script
     [ "$status" -eq 0 ]
     [ "$(_json_field "$output" "max_findings")" = "99" ]
 }
 
-@test "T012d: env-override — SPECKIT_ROADMAP_PRD_GLOBS (comma-separated) wins over defaults" {
+@test "T012d: env-override — SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS (comma-separated) wins over defaults" {
     _build_fake_repo
-    SPECKIT_ROADMAP_PRD_GLOBS="glob/one.md,glob/two.yaml" _run_script
+    SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS="glob/one.md,glob/two.yaml" _run_script
     [ "$status" -eq 0 ]
     [ "$(_json_arr_len "$output" "prd_globs")" = "2" ]
     _json_arr_contains "$output" "prd_globs" "glob/one.md"
     _json_arr_contains "$output" "prd_globs" "glob/two.yaml"
 }
 
-@test "T012e: env-override — all four SPECKIT_ROADMAP_* vars simultaneously override everything" {
+@test "T012e: env-override — all four SPECKIT_DIAGRAM_ROADMAP_* vars simultaneously override everything" {
     _build_fake_repo
     _install_fixture "env.yml"
-    SPECKIT_ROADMAP_PATH="e/road.md" \
-    SPECKIT_ROADMAP_ADR_DIR="e/adr/" \
-    SPECKIT_ROADMAP_MAX_FINDINGS=7 \
-    SPECKIT_ROADMAP_PRD_GLOBS="e/prd.md" \
+    SPECKIT_DIAGRAM_ROADMAP_PATH="e/road.md" \
+    SPECKIT_DIAGRAM_ROADMAP_ADR_DIR="e/adr/" \
+    SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS=7 \
+    SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS="e/prd.md" \
     _run_script
     [ "$status" -eq 0 ]
     [ "$(_json_field "$output" "roadmap_path")" = "e/road.md" ]
@@ -291,14 +291,14 @@ assert val in arr, f'{val!r} not in {arr}'
     _build_fake_repo
     mkdir -p "$FAKE_ROOT/docs"
     touch "$FAKE_ROOT/docs/roadmap.md"
-    SPECKIT_ROADMAP_PATH="docs/roadmap.md" _run_script
+    SPECKIT_DIAGRAM_ROADMAP_PATH="docs/roadmap.md" _run_script
     [ "$status" -eq 0 ]
     [ "$(_json_field "$output" "roadmap_exists")" = "True" ]
 }
 
 @test "T013b: existence detection — roadmap_exists false when file absent" {
     _build_fake_repo
-    SPECKIT_ROADMAP_PATH="nonexistent/roadmap.md" _run_script
+    SPECKIT_DIAGRAM_ROADMAP_PATH="nonexistent/roadmap.md" _run_script
     [ "$status" -eq 0 ]
     [ "$(_json_field "$output" "roadmap_exists")" = "False" ]
 }
@@ -306,14 +306,14 @@ assert val in arr, f'{val!r} not in {arr}'
 @test "T013c: existence detection — adr_present true when directory present" {
     _build_fake_repo
     mkdir -p "$FAKE_ROOT/docs/adrs"
-    SPECKIT_ROADMAP_ADR_DIR="docs/adrs" _run_script
+    SPECKIT_DIAGRAM_ROADMAP_ADR_DIR="docs/adrs" _run_script
     [ "$status" -eq 0 ]
     [ "$(_json_field "$output" "adr_present")" = "True" ]
 }
 
 @test "T013d: existence detection — adr_present false when directory absent" {
     _build_fake_repo
-    SPECKIT_ROADMAP_ADR_DIR="no/such/dir" _run_script
+    SPECKIT_DIAGRAM_ROADMAP_ADR_DIR="no/such/dir" _run_script
     [ "$status" -eq 0 ]
     [ "$(_json_field "$output" "adr_present")" = "False" ]
 }
@@ -322,7 +322,7 @@ assert val in arr, f'{val!r} not in {arr}'
     _build_fake_repo
     local abs_path="$BATS_TEST_TMPDIR/abs-roadmap.md"
     touch "$abs_path"
-    SPECKIT_ROADMAP_PATH="$abs_path" _run_script
+    SPECKIT_DIAGRAM_ROADMAP_PATH="$abs_path" _run_script
     [ "$status" -eq 0 ]
     [ "$(_json_field "$output" "roadmap_exists")" = "True" ]
 }
@@ -351,7 +351,7 @@ assert val in arr, f'{val!r} not in {arr}'
 @test "T014b: escaping — value with backslash via env override produces valid JSON" {
     _build_fake_repo
     # Backslash in path: json_escape must double it → \\
-    SPECKIT_ROADMAP_PATH='path\with\backslash.md' _run_script
+    SPECKIT_DIAGRAM_ROADMAP_PATH='path\with\backslash.md' _run_script
     [ "$status" -eq 0 ]
     local result
     result=$(_assert_valid_json "$output")
@@ -424,7 +424,7 @@ assert val in arr, f'{val!r} not in {arr}'
 
 @test "T016c: invalid max_findings via env var — exits non-zero with no JSON on stdout" {
     _build_fake_repo
-    SPECKIT_ROADMAP_MAX_FINDINGS="notanumber" run --separate-stderr bash "$FAKE_ROOT/scripts/bash/load-config.sh"
+    SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS="notanumber" run --separate-stderr bash "$FAKE_ROOT/scripts/bash/load-config.sh"
     [ "$status" -ne 0 ]
     [ -z "$output" ]
 }
@@ -456,7 +456,7 @@ assert val in arr, f'{val!r} not in {arr}'
     cp "$SCRIPT" "$fallback_dir/scripts/bash/load-config.sh"
 
     # Glob with an embedded double-quote exercises json_escape
-    run bash -c "cd '$fallback_dir/alien' && SPECKIT_ROADMAP_PRD_GLOBS='path/with/\"quotes\"/glob.md' bash '$fallback_dir/scripts/bash/load-config.sh'"
+    run bash -c "cd '$fallback_dir/alien' && SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS='path/with/\"quotes\"/glob.md' bash '$fallback_dir/scripts/bash/load-config.sh'"
     [ "$status" -eq 0 ]
     [ -n "$output" ]
     local result
@@ -470,7 +470,7 @@ assert val in arr, f'{val!r} not in {arr}'
     mkdir -p "$fallback_dir/alien"
     cp "$SCRIPT" "$fallback_dir/scripts/bash/load-config.sh"
 
-    run bash -c "cd '$fallback_dir/alien' && SPECKIT_ROADMAP_PRD_GLOBS='path/with/\"quotes\"/glob.md' bash '$fallback_dir/scripts/bash/load-config.sh'"
+    run bash -c "cd '$fallback_dir/alien' && SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS='path/with/\"quotes\"/glob.md' bash '$fallback_dir/scripts/bash/load-config.sh'"
     [ "$status" -eq 0 ]
     _json_arr_contains "$output" "prd_globs" 'path/with/"quotes"/glob.md'
 }

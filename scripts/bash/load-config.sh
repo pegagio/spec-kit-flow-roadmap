@@ -66,8 +66,8 @@ if ! declare -F json_escape >/dev/null 2>&1; then
     }
 fi
 
-CONFIG_FILE="$REPO_ROOT/.specify/extensions/roadmap/roadmap-config.yml"
-EXTENSION_FILE="$REPO_ROOT/.specify/extensions/roadmap/extension.yml"
+CONFIG_FILE="$REPO_ROOT/.specify/extensions/diagram-roadmap/roadmap-config.yml"
+EXTENSION_FILE="$REPO_ROOT/.specify/extensions/diagram-roadmap/extension.yml"
 
 # --- Built-in defaults ----------------------------------------------------------
 DEF_ROADMAP_PATH=".specify/memory/roadmap.md"
@@ -103,9 +103,9 @@ resolve() {
     printf '%s' "$v"
 }
 
-ROADMAP_PATH="$(resolve "${SPECKIT_ROADMAP_PATH:-}" "path" "$DEF_ROADMAP_PATH")"
-ADR_DIR="$(resolve "${SPECKIT_ROADMAP_ADR_DIR:-}" "dir" "$DEF_ADR_DIR")"
-MAX_FINDINGS="$(resolve "${SPECKIT_ROADMAP_MAX_FINDINGS:-}" "max_findings" "$DEF_MAX_FINDINGS")"
+ROADMAP_PATH="$(resolve "${SPECKIT_DIAGRAM_ROADMAP_PATH:-}" "path" "$DEF_ROADMAP_PATH")"
+ADR_DIR="$(resolve "${SPECKIT_DIAGRAM_ROADMAP_ADR_DIR:-}" "dir" "$DEF_ADR_DIR")"
+MAX_FINDINGS="$(resolve "${SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS:-}" "max_findings" "$DEF_MAX_FINDINGS")"
 
 # --- Validate -------------------------------------------------------------------
 case "$MAX_FINDINGS" in
@@ -130,9 +130,9 @@ esac
 
 # --- PRD globs: PATTERNS ONLY (env CSV → config list → built-in defaults) --------
 prd_globs=""
-if [ -n "${SPECKIT_ROADMAP_PRD_GLOBS:-}" ]; then
+if [ -n "${SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS:-}" ]; then
     # Comma-separated env override → newline-delimited.
-    prd_globs="$(printf '%s' "$SPECKIT_ROADMAP_PRD_GLOBS" | tr ',' '\n')"
+    prd_globs="$(printf '%s' "$SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS" | tr ',' '\n')"
 else
     for f in "$CONFIG_FILE" "$EXTENSION_FILE"; do
         if [ -f "$f" ] && grep -Eq '^[[:space:]]*globs:' "$f"; then

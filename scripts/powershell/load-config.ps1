@@ -32,8 +32,8 @@ if (-not $repoRoot) { $repoRoot = Find-SpecifyRoot (Get-Location).Path }
 # Last resort: CWD (no spec-kit repo located — built-in defaults still apply below).
 if (-not $repoRoot) { $repoRoot = (Get-Location).Path }
 
-$configFile    = Join-Path $repoRoot '.specify/extensions/roadmap/roadmap-config.yml'
-$extensionFile = Join-Path $repoRoot '.specify/extensions/roadmap/extension.yml'
+$configFile    = Join-Path $repoRoot '.specify/extensions/diagram-roadmap/roadmap-config.yml'
+$extensionFile = Join-Path $repoRoot '.specify/extensions/diagram-roadmap/extension.yml'
 
 # --- Built-in defaults ----------------------------------------------------------
 $defRoadmapPath  = '.specify/memory/roadmap.md'
@@ -61,9 +61,9 @@ function Resolve-Value([string]$envVal, [string]$key, [string]$default) {
     return $v
 }
 
-$roadmapPath = Resolve-Value $env:SPECKIT_ROADMAP_PATH 'path' $defRoadmapPath
-$adrDir      = Resolve-Value $env:SPECKIT_ROADMAP_ADR_DIR 'dir' $defAdrDir
-$maxFindings = Resolve-Value $env:SPECKIT_ROADMAP_MAX_FINDINGS 'max_findings' $defMaxFindings
+$roadmapPath = Resolve-Value $env:SPECKIT_DIAGRAM_ROADMAP_PATH 'path' $defRoadmapPath
+$adrDir      = Resolve-Value $env:SPECKIT_DIAGRAM_ROADMAP_ADR_DIR 'dir' $defAdrDir
+$maxFindings = Resolve-Value $env:SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS 'max_findings' $defMaxFindings
 
 # --- Validate -------------------------------------------------------------------
 if ($maxFindings -notmatch '^[0-9]+$') {
@@ -80,8 +80,8 @@ $adrPresent   = Test-Path -PathType Container $adrAbs
 
 # --- PRD globs ------------------------------------------------------------------
 $prdGlobs = @()
-if ($env:SPECKIT_ROADMAP_PRD_GLOBS) {
-    $prdGlobs = $env:SPECKIT_ROADMAP_PRD_GLOBS.Split(',') | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+if ($env:SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS) {
+    $prdGlobs = $env:SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS.Split(',') | ForEach-Object { $_.Trim() } | Where-Object { $_ }
 } else {
     foreach ($f in @($configFile, $extensionFile)) {
         if ((Test-Path $f) -and (Select-String -Path $f -Pattern '^\s*globs:' -Quiet)) {

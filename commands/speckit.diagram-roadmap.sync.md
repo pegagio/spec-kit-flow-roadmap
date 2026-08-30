@@ -1,8 +1,8 @@
 ---
 description: Read-only reconciliation — detect drift between the roadmap ledger and the specs on disk (orphans, phantom entries, status drift, dependency contradictions, superseded ADRs).
 scripts:
-  sh: .specify/extensions/roadmap/scripts/bash/load-config.sh
-  ps: .specify/extensions/roadmap/scripts/powershell/load-config.ps1
+  sh: .specify/extensions/diagram-roadmap/scripts/bash/load-config.sh
+  ps: .specify/extensions/diagram-roadmap/scripts/powershell/load-config.ps1
 ---
 
 ## User Input
@@ -33,7 +33,7 @@ on-demand, project-wide check (unlike the per-spec brief/debrief hooks).
    `roadmap_exists`, `adr_dir`, `adr_present`.
 
 2. **Graceful preconditions:** if `roadmap_exists` is false → report that and suggest
-   `/speckit.roadmap.write`; stop. If `specs/` is empty or absent → note "no specs on disk"
+   `/speckit.diagram-roadmap.write`; stop. If `specs/` is empty or absent → note "no specs on disk"
    (pre-commitment entries are still fine) and continue.
 
 3. Read the roadmap ledger. Enumerate the spec directories on disk by listing `specs/*/`.
@@ -56,11 +56,11 @@ on-demand, project-wide check (unlike the per-spec brief/debrief hooks).
      `adr_present`).
 
 5. **Write the report** to `.specify/memory/roadmap-sync-{timestamp}.md` (roadmap-level, not
-   per-feature) using `.specify/extensions/roadmap/templates/review-report-template.md`
+   per-feature) using `.specify/extensions/diagram-roadmap/templates/review-report-template.md`
    (kind = "Roadmap Sync"). Group findings by divergence type, with a per-type count summary
    at the top, capped at the configured `max_findings` (aggregate any overflow). Include a
    verdict and Recommended Actions. Never overwrite a prior report.
 
 6. **Propose** reconciling actions (add orphan to roadmap, advance status, investigate
    phantom, resolve dependency, supersede entry) as instructions only — apply via
-   `/speckit.roadmap.write`. Report the verdict and report path to the user.
+   `/speckit.diagram-roadmap.write`. Report the verdict and report path to the user.

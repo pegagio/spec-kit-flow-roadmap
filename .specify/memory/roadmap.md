@@ -1,22 +1,26 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.3.0 → 1.4.0
-Bump rationale: MINOR — post-implementation amendment after spec 004 (roadmap.sync)
-  verified, plus a new Open Question (Q6). Status transition + scope addition + a new
-  open question; no direction change, so not MAJOR.
+Version change: 1.4.0 → 1.5.0
+Bump rationale: MINOR — adds the Diagram Roadmap identity-migration feature and
+  reconciles current command, installation, project, and repository naming.
 
-Changes this revision (1.4.0, amended 2026-06-24):
-  - 005 roadmap.sync: planned → verified; scope-in gains the STATUS-as-pivot rule, the
-    divergence taxonomy, the empty-dir definition, and the process-entry exception; added
-    spec dir specs/004-roadmap-sync/; governed-by gains C-01.
-  - Q5 resolved (agent-context refreshed). Q6 added (process/bootstrap-entry phantom
-    exemption — surfaced by the real sync dogfood). Q2/Q4 noted partially resolved.
-  - Triggered by the spec 004 debrief (after_implement gate). With this, all four review
-    commands + the authoring command are verified.
+Changes this revision (1.5.0, amended 2026-08-30):
+  - Added entry 008 for the flow-forward rename from speckit-roadmap/roadmap to
+    Diagram Roadmap/diagram-roadmap.
+  - Updated current command and installed-path references to
+    speckit.diagram-roadmap.* and .specify/extensions/diagram-roadmap/.
+  - Verified entry 008 through a disposable Spec Kit 1.0.1 installation, exact
+    payload and generated-skill checks, hook checks, and installed Bash execution.
+  - Preserved merged feature directories, the dated sync report, and released
+    changelog history under their accepted original terminology.
 
-Specs affected: 005
-Open questions added/resolved: Q5 resolved; Q6 added; Q1 still open.
+Specs affected: 008
+Open questions added/resolved: none.
+
+--- Prior revision (1.4.0, amended 2026-06-24): MINOR — after spec 004 verified.
+    005 roadmap.sync → verified; scope-in gained the divergence taxonomy,
+    status pivot, empty-dir definition, and process-entry exception; Q6 added.
 
 --- Prior revision (1.3.0, amended 2026-06-24): MINOR — after spec 003 verified.
     004 roadmap.debrief → verified; scope-in gained the drift taxonomy + verified-gate +
@@ -37,9 +41,9 @@ Open questions added/resolved: Q5 resolved; Q6 added; Q1 still open.
     Questions rather than fabricated.
 -->
 
-# speckit-roadmap — Spec Roadmap
+# Diagram Roadmap — Spec Roadmap
 
-Living, non-binding map of the specs planned for **speckit-roadmap**. It is **not a
+Living, non-binding map of the specs planned for **Diagram Roadmap**. It is **not a
 commitment to order or scope** — it captures the spec-specific discussion,
 decisions, technology choices, outcomes, and constraints surfaced during the
 constitution and grilling phases so they are not lost before the spec that needs
@@ -56,7 +60,7 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 
 <!-- Harvested from the constitution; the WHY of the project. -->
 
-- A spec-kit extension (`speckit-roadmap`) that **installs and registers cleanly**
+- A spec-kit extension (`diagram-roadmap`) that **installs and registers cleanly**
   via `specify extension add` / `enable` and whose three lifecycle hooks
   (`after_constitution`, `before_implement`, `after_implement`) fire correctly in a
   real spec-kit project.
@@ -131,27 +135,27 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
   installs/enables and the `after_constitution` hook is registered; the roadmap
   template and draft command exist at the repo root.
 - **Scope (in):** `extension.yml`, `templates/roadmap-template.md`, initial
-  `commands/speckit.roadmap.write.md`.
+  `commands/speckit.diagram-roadmap.write.md`.
 - **Scope (out):** brief/debrief/sync commands; PowerShell scripts; tests; release
   packaging.
 - **Depends on:** none.
 - **Governed by:** C-01, C-07.
 - **Notes:** Matches task "Author minimal bootstrap (manifest, template, draft)",
   marked complete. The bootstrap artifacts are present at the repo root and mirrored
-  under `.specify/extensions/roadmap/`.
+  under `.specify/extensions/diagram-roadmap/`.
 
 ### 002 — roadmap.write command + load-config script  [status: verified]
 
 - **Description:** The create/amend `write` command plus its `load-config` script
   (bash + PowerShell) that emits the JSON config contract (`roadmap_path`,
   `roadmap_exists`, `adr_dir`, `adr_present`, `prd_globs`, `max_findings`).
-- **Outcome:** Running `speckit.roadmap.write` after the constitution produces a
+- **Outcome:** Running `speckit.diagram-roadmap.write` after the constitution produces a
   versioned `roadmap.md` (v1.0.0 on create) or non-destructively amends + version-
   bumps an existing one; the script resolves config from `config-template.yml` /
-  `roadmap-config.yml` and `SPECKIT_ROADMAP_*` env overrides, identically on bash and
+  `roadmap-config.yml` and `SPECKIT_DIAGRAM_ROADMAP_*` env overrides, identically on bash and
   PowerShell. **Achieved** — verified by 96 passing tests (Bats 35 + Pester 53 +
   parity 8) and two clean verification gates.
-- **Scope (in):** `commands/speckit.roadmap.write.md`, `scripts/bash/load-config.sh`,
+- **Scope (in):** `commands/speckit.diagram-roadmap.write.md`, `scripts/bash/load-config.sh`,
   **`scripts/powershell/load-config.ps1` + the Bats/Pester/parity test suite** (folded
   in from former entry 006), config detection logic, self-detecting create-vs-amend,
   semver bump rules, malformed-roadmap guard.
@@ -162,8 +166,8 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 - **Notes:** Built via the full SDD cycle (specify → plan → critique → tasks →
   implement → verify → debrief). The debrief surfaced that PowerShell parity landed
   here rather than in a separate spec; entry 006 is absorbed into this one (see v1.1.0
-  Sync Impact Report). Resolves former Q4 (script path → installed `.specify/extensions/
-  roadmap/...` path).
+  Sync Impact Report). Resolves former Q4 (script path → installed
+  `.specify/extensions/diagram-roadmap/...` path).
 
 ### 003 — roadmap.brief (pre-implementation review)  [status: verified]
 
@@ -174,7 +178,7 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
   recorded outcome, in/out scope, governing C-/ADR ids, and dependency specs, with
   no file mutation. **Achieved** — built via the full SDD cycle and dogfood-verified
   read-only (roadmap unchanged across runs).
-- **Scope (in):** `commands/speckit.roadmap.brief.md`; matching the active spec to its
+- **Scope (in):** `commands/speckit.diagram-roadmap.brief.md`; matching the active spec to its
   ledger entry (spec-dir → title → number, with an **ambiguous-match tie-break: list
   candidates and ask**); rendering a briefing report; **the shared
   `templates/review-report-template.md`** (also reused by debrief/sync).
@@ -194,7 +198,7 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 - **Outcome:** After `/speckit.implement`, a report compares the built spec to its
   recorded outcome/scope and PROPOSES (does not apply) a ledger status update.
   **Achieved** — built via the full SDD cycle and dogfood-verified read-only.
-- **Scope (in):** `commands/speckit.roadmap.debrief.md`; outcome/scope comparison; the
+- **Scope (in):** `commands/speckit.diagram-roadmap.debrief.md`; outcome/scope comparison; the
   **drift taxonomy** (outcome-miss / scope-creep / constraint-violation / roadmap-stale);
   the **verified-gate** (propose verified only when outcome met AND zero must-address);
   bounded reading of spec-referenced artifacts; uses the shared review-report template.
@@ -215,7 +219,7 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
   drift, proposing reconciling edits without applying them. **Achieved** — built via
   the full SDD cycle and dogfooded against this repo's own roadmap (correctly flagged
   the then-in-progress sync spec as status-lagging).
-- **Scope (in):** `commands/speckit.roadmap.sync.md`; whole-ledger-vs-`specs/`
+- **Scope (in):** `commands/speckit.diagram-roadmap.sync.md`; whole-ledger-vs-`specs/`
   comparison; the **STATUS-as-pivot** disk-existence rule; the divergence taxonomy
   (orphan-spec / phantom-entry / status-lagging / dependency-contradiction /
   superseded-ADR); the **empty-dir** definition (spec.md missing or still template);
@@ -263,6 +267,17 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 - **Notes:** Maps to task "Add release-please + README/CHANGELOG/LICENSE". LICENSE
   exists at the repo root already; README/CHANGELOG for the extension still pending.
 
+### 008 — Rename project identity  [status: verified]
+
+- **Description:** Rename the active project identity to Diagram Roadmap, the extension ID to `diagram-roadmap`, the intended repository to `spec-kit-diagram-roadmap`, and the canonical commands to `speckit.diagram-roadmap.*`.
+- **Outcome:** A disposable Spec Kit project installs and enables Diagram Roadmap version `0.2.0`; all four commands, generated skills, hooks, configuration, runtime paths, and current project documentation agree on the new identity.
+- **Scope (in):** `extension.yml`, `.extensionignore`, `commands/`, `scripts/`, `templates/review-report-template.md`, platform tests, current project documentation, constitution identity text, and this living roadmap.
+- **Scope (out):** Renaming the GitHub repository or local checkout; compatibility aliases; automatic migration of existing installed configuration; rewriting merged feature directories, dated reports, or released changelog history.
+- **Depends on:** 001, 002, 003, 004, 005.
+- **Governed by:** C-01, C-03, C-05, C-07.
+- **Spec dir:** specs/005-rename-project-identity/
+- **Notes:** This entry flows the later identity change forward while preserving the accepted terminology of earlier features. Verified by a disposable Spec Kit 1.0.1 installation, exact payload and generated-skill checks, hook registration checks, and installed Bash loader execution; Bats and PowerShell were unavailable locally.
+
 ## Open Questions
 
 <!-- Genuine gaps the draft could not resolve from harvested context. These were
@@ -283,7 +298,7 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 - **Q4 — Script path discrepancy (found while drafting):** the draft command body /
   skill reference `.specify/scripts/bash/load-config.sh`, but the working script is
   at `scripts/bash/load-config.sh` (repo root) and mirrored at
-  `.specify/extensions/roadmap/scripts/bash/load-config.sh`. The documented path
+  `.specify/extensions/diagram-roadmap/scripts/bash/load-config.sh`. The documented path
   does not exist. Confirm the intended canonical path so 002/006 align.
 - **Q5 — Stale agent context files:** ~~`CLAUDE.md` and `AGENTS.md` embed the unfilled
   constitution template~~ **RESOLVED 2026-06-24** — refreshed via `apm compile` to the
@@ -296,7 +311,7 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
   convention and whether bootstrap-style entries should carry an explicit marker.
 
 > **Partially resolved:** Q2 (granularity) → per-command specs (002–005 each own a spec).
-> Q4 (script path) → commands reference the installed `.specify/extensions/roadmap/...` path
+> Q4 (script path) → commands reference the installed `.specify/extensions/diagram-roadmap/...` path
 > via `{SCRIPT}` frontmatter. Q1 (numbering) remains: roadmap entry N ≠ spec-dir N; matched
 > by title/`spec dir:` pointer for now.
 
@@ -311,9 +326,9 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 - **Read-only is the default for reviews.** brief/debrief/sync (003/004/005) must
   emit reports and PROPOSE edits only; only `write` (002) writes, and only the roadmap
   artifact, non-destructively.
-- **Source of truth is the repo root**, mirrored into `.specify/extensions/roadmap/`
+- **Source of truth is the repo root**, mirrored into `.specify/extensions/diagram-roadmap/`
   for the installed/dogfooded copy. Keep both in sync when editing commands/scripts.
 
 ---
 
-**Version**: 1.4.0 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-06-24
+**Version**: 1.5.0 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-08-30

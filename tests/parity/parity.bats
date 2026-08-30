@@ -33,7 +33,7 @@ FIXTURES_DIR="$REPO_ROOT/tests/bash/fixtures"
 # Sets global FAKE_ROOT to the repo root.
 _build_fake_repo() {
     FAKE_ROOT="$BATS_TEST_TMPDIR/parity_repo"
-    mkdir -p "$FAKE_ROOT/.specify/extensions/roadmap"
+    mkdir -p "$FAKE_ROOT/.specify/extensions/diagram-roadmap"
     mkdir -p "$FAKE_ROOT/.specify/scripts/bash"
     mkdir -p "$FAKE_ROOT/scripts/bash"
     mkdir -p "$FAKE_ROOT/scripts/powershell"
@@ -49,7 +49,7 @@ _build_fake_repo() {
 # Install a named fixture as roadmap-config.yml in the fake repo.
 _install_fixture() {
     local name="$1"
-    cp "$FIXTURES_DIR/${name}" "$FAKE_ROOT/.specify/extensions/roadmap/roadmap-config.yml"
+    cp "$FIXTURES_DIR/${name}" "$FAKE_ROOT/.specify/extensions/diagram-roadmap/roadmap-config.yml"
 }
 
 # Run both scripts and capture stdout/exit to BASH_OUT/PS1_OUT/BASH_EXIT/PS1_EXIT.
@@ -178,24 +178,24 @@ PYEOF
     [ "$result" = "MATCH" ]
 }
 
-@test "parity: env.yml — bash and PS1 agree when all SPECKIT_ROADMAP_* env vars are set" {
+@test "parity: env.yml — bash and PS1 agree when all SPECKIT_DIAGRAM_ROADMAP_* env vars are set" {
     _build_fake_repo
     _install_fixture "env.yml"
 
     BASH_OUT="$BATS_TEST_TMPDIR/bash_env_out.txt"
     PS1_OUT="$BATS_TEST_TMPDIR/ps1_env_out.txt"
 
-    SPECKIT_ROADMAP_PATH="e/road.md" \
-    SPECKIT_ROADMAP_ADR_DIR="e/adr/" \
-    SPECKIT_ROADMAP_MAX_FINDINGS=7 \
-    SPECKIT_ROADMAP_PRD_GLOBS="e/prd.md,e/spec.yaml" \
+    SPECKIT_DIAGRAM_ROADMAP_PATH="e/road.md" \
+    SPECKIT_DIAGRAM_ROADMAP_ADR_DIR="e/adr/" \
+    SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS=7 \
+    SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS="e/prd.md,e/spec.yaml" \
     bash "$FAKE_ROOT/scripts/bash/load-config.sh" >"$BASH_OUT" 2>/dev/null
     BASH_EXIT=$?
 
-    SPECKIT_ROADMAP_PATH="e/road.md" \
-    SPECKIT_ROADMAP_ADR_DIR="e/adr/" \
-    SPECKIT_ROADMAP_MAX_FINDINGS=7 \
-    SPECKIT_ROADMAP_PRD_GLOBS="e/prd.md,e/spec.yaml" \
+    SPECKIT_DIAGRAM_ROADMAP_PATH="e/road.md" \
+    SPECKIT_DIAGRAM_ROADMAP_ADR_DIR="e/adr/" \
+    SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS=7 \
+    SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS="e/prd.md,e/spec.yaml" \
     pwsh -NoProfile -File "$FAKE_ROOT/scripts/powershell/load-config.ps1" >"$PS1_OUT" 2>/dev/null
     PS1_EXIT=$?
 

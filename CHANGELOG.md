@@ -5,6 +5,13 @@ All notable changes to this extension are documented here. The format follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Version entries are
 maintained explicitly.
 
+## Unreleased
+
+### Changed
+
+- Renamed the project to Diagram Roadmap, the extension ID to `diagram-roadmap`, and the command namespace to `speckit.diagram-roadmap.*`.
+- Updated the intended repository name to `spec-kit-diagram-roadmap` and aligned installed paths, documentation, and tests with the new extension ID.
+
 ## 0.1.0 (2026-06-24)
 
 Initial release — a GitHub Spec Kit extension that adds a durable spec roadmap to the

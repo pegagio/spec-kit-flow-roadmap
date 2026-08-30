@@ -42,7 +42,7 @@ BeforeAll {
     # -----------------------------------------------------------------------
     function New-FakeRepo {
         $root = Join-Path $script:SUITE_TMP "repo_$(New-Guid)"
-        $null = New-Item -ItemType Directory -Path (Join-Path $root '.specify/extensions/roadmap') -Force
+        $null = New-Item -ItemType Directory -Path (Join-Path $root '.specify/extensions/diagram-roadmap') -Force
         $null = New-Item -ItemType Directory -Path (Join-Path $root 'scripts/powershell') -Force
         Copy-Item -Path $script:PROD_SCRIPT -Destination (Join-Path $root 'scripts/powershell/load-config.ps1')
         return $root
@@ -53,7 +53,7 @@ BeforeAll {
     # -----------------------------------------------------------------------
     function Install-Fixture([string]$repoRoot, [string]$name) {
         $src = Join-Path $script:FIXTURES_DIR $name
-        $dst = Join-Path $repoRoot '.specify/extensions/roadmap/roadmap-config.yml'
+        $dst = Join-Path $repoRoot '.specify/extensions/diagram-roadmap/roadmap-config.yml'
         Copy-Item -Path $src -Destination $dst -Force
     }
 
@@ -227,7 +227,7 @@ Describe 'T011: file-override — valid.yml overrides defaults' {
 Describe 'T011e-f: null-sentinel — null and tilde fall through to defaults' {
     It 'null value for path falls through to built-in default' {
         $root = New-FakeRepo
-        Set-Content -Path (Join-Path $root '.specify/extensions/roadmap/roadmap-config.yml') `
+        Set-Content -Path (Join-Path $root '.specify/extensions/diagram-roadmap/roadmap-config.yml') `
             -Value "roadmap:`n  path: null`n"
         $result = Invoke-FakeRepoScript $root
         $json   = Get-OutputJson $result.Stdout
@@ -236,7 +236,7 @@ Describe 'T011e-f: null-sentinel — null and tilde fall through to defaults' {
 
     It 'tilde (~) value for path falls through to built-in default' {
         $root = New-FakeRepo
-        Set-Content -Path (Join-Path $root '.specify/extensions/roadmap/roadmap-config.yml') `
+        Set-Content -Path (Join-Path $root '.specify/extensions/diagram-roadmap/roadmap-config.yml') `
             -Value "roadmap:`n  path: ~`n"
         $result = Invoke-FakeRepoScript $root
         $json   = Get-OutputJson $result.Stdout
@@ -245,48 +245,48 @@ Describe 'T011e-f: null-sentinel — null and tilde fall through to defaults' {
 }
 
 # ===========================================================================
-# T012: env-override — SPECKIT_ROADMAP_* wins over file AND defaults
+# T012: env-override — SPECKIT_DIAGRAM_ROADMAP_* wins over file AND defaults
 # ===========================================================================
-Describe 'T012: env-override — SPECKIT_ROADMAP_* wins over file and defaults' {
-    It 'SPECKIT_ROADMAP_PATH wins over file value' {
+Describe 'T012: env-override — SPECKIT_DIAGRAM_ROADMAP_* wins over file and defaults' {
+    It 'SPECKIT_DIAGRAM_ROADMAP_PATH wins over file value' {
         $root   = New-FakeRepo
         Install-Fixture $root 'env.yml'
-        $result = Invoke-FakeRepoScript $root @{ SPECKIT_ROADMAP_PATH = 'custom/env-roadmap.md' }
+        $result = Invoke-FakeRepoScript $root @{ SPECKIT_DIAGRAM_ROADMAP_PATH = 'custom/env-roadmap.md' }
         $json   = Get-OutputJson $result.Stdout
         $json.roadmap_path | Should -Be 'custom/env-roadmap.md'
     }
 
-    It 'SPECKIT_ROADMAP_ADR_DIR wins over defaults' {
+    It 'SPECKIT_DIAGRAM_ROADMAP_ADR_DIR wins over defaults' {
         $root   = New-FakeRepo
-        $result = Invoke-FakeRepoScript $root @{ SPECKIT_ROADMAP_ADR_DIR = 'my/adr/' }
+        $result = Invoke-FakeRepoScript $root @{ SPECKIT_DIAGRAM_ROADMAP_ADR_DIR = 'my/adr/' }
         $json   = Get-OutputJson $result.Stdout
         $json.adr_dir | Should -Be 'my/adr/'
     }
 
-    It 'SPECKIT_ROADMAP_MAX_FINDINGS wins over defaults' {
+    It 'SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS wins over defaults' {
         $root   = New-FakeRepo
-        $result = Invoke-FakeRepoScript $root @{ SPECKIT_ROADMAP_MAX_FINDINGS = '99' }
+        $result = Invoke-FakeRepoScript $root @{ SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS = '99' }
         $json   = Get-OutputJson $result.Stdout
         $json.max_findings | Should -Be 99
     }
 
-    It 'SPECKIT_ROADMAP_PRD_GLOBS comma-separated wins over defaults (2 globs)' {
+    It 'SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS comma-separated wins over defaults (2 globs)' {
         $root   = New-FakeRepo
-        $result = Invoke-FakeRepoScript $root @{ SPECKIT_ROADMAP_PRD_GLOBS = 'glob/one.md,glob/two.yaml' }
+        $result = Invoke-FakeRepoScript $root @{ SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS = 'glob/one.md,glob/two.yaml' }
         $json   = Get-OutputJson $result.Stdout
         $json.prd_globs.Count | Should -Be 2
         $json.prd_globs | Should -Contain 'glob/one.md'
         $json.prd_globs | Should -Contain 'glob/two.yaml'
     }
 
-    It 'all four SPECKIT_ROADMAP_* vars simultaneously override everything' {
+    It 'all four SPECKIT_DIAGRAM_ROADMAP_* vars simultaneously override everything' {
         $root   = New-FakeRepo
         Install-Fixture $root 'env.yml'
         $result = Invoke-FakeRepoScript $root @{
-            SPECKIT_ROADMAP_PATH         = 'e/road.md'
-            SPECKIT_ROADMAP_ADR_DIR      = 'e/adr/'
-            SPECKIT_ROADMAP_MAX_FINDINGS = '7'
-            SPECKIT_ROADMAP_PRD_GLOBS    = 'e/prd.md'
+            SPECKIT_DIAGRAM_ROADMAP_PATH         = 'e/road.md'
+            SPECKIT_DIAGRAM_ROADMAP_ADR_DIR      = 'e/adr/'
+            SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS = '7'
+            SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS    = 'e/prd.md'
         }
         $json = Get-OutputJson $result.Stdout
         $json.roadmap_path    | Should -Be 'e/road.md'
@@ -305,14 +305,14 @@ Describe 'T013: existence detection — roadmap_exists and adr_present' {
         $root = New-FakeRepo
         $null = New-Item -ItemType Directory -Path (Join-Path $root 'docs') -Force
         $null = New-Item -ItemType File -Path (Join-Path $root 'docs/roadmap.md') -Force
-        $result = Invoke-FakeRepoScript $root @{ SPECKIT_ROADMAP_PATH = 'docs/roadmap.md' }
+        $result = Invoke-FakeRepoScript $root @{ SPECKIT_DIAGRAM_ROADMAP_PATH = 'docs/roadmap.md' }
         $json   = Get-OutputJson $result.Stdout
         $json.roadmap_exists | Should -Be $true
     }
 
     It 'roadmap_exists false when file absent' {
         $root   = New-FakeRepo
-        $result = Invoke-FakeRepoScript $root @{ SPECKIT_ROADMAP_PATH = 'nonexistent/roadmap.md' }
+        $result = Invoke-FakeRepoScript $root @{ SPECKIT_DIAGRAM_ROADMAP_PATH = 'nonexistent/roadmap.md' }
         $json   = Get-OutputJson $result.Stdout
         $json.roadmap_exists | Should -Be $false
     }
@@ -320,14 +320,14 @@ Describe 'T013: existence detection — roadmap_exists and adr_present' {
     It 'adr_present true when directory present' {
         $root = New-FakeRepo
         $null = New-Item -ItemType Directory -Path (Join-Path $root 'docs/adrs') -Force
-        $result = Invoke-FakeRepoScript $root @{ SPECKIT_ROADMAP_ADR_DIR = 'docs/adrs' }
+        $result = Invoke-FakeRepoScript $root @{ SPECKIT_DIAGRAM_ROADMAP_ADR_DIR = 'docs/adrs' }
         $json   = Get-OutputJson $result.Stdout
         $json.adr_present | Should -Be $true
     }
 
     It 'adr_present false when directory absent' {
         $root   = New-FakeRepo
-        $result = Invoke-FakeRepoScript $root @{ SPECKIT_ROADMAP_ADR_DIR = 'no/such/dir' }
+        $result = Invoke-FakeRepoScript $root @{ SPECKIT_DIAGRAM_ROADMAP_ADR_DIR = 'no/such/dir' }
         $json   = Get-OutputJson $result.Stdout
         $json.adr_present | Should -Be $false
     }
@@ -336,7 +336,7 @@ Describe 'T013: existence detection — roadmap_exists and adr_present' {
         $root    = New-FakeRepo
         $absPath = Join-Path $script:SUITE_TMP 'abs-roadmap.md'
         $null    = New-Item -ItemType File -Path $absPath -Force
-        $result  = Invoke-FakeRepoScript $root @{ SPECKIT_ROADMAP_PATH = $absPath }
+        $result  = Invoke-FakeRepoScript $root @{ SPECKIT_DIAGRAM_ROADMAP_PATH = $absPath }
         $json    = Get-OutputJson $result.Stdout
         $json.roadmap_exists | Should -Be $true
     }
@@ -357,7 +357,7 @@ Describe 'T014: escaping — special characters produce valid JSON' {
 
     It 'backslash in path via env override produces valid JSON' {
         $root   = New-FakeRepo
-        $result = Invoke-FakeRepoScript $root @{ SPECKIT_ROADMAP_PATH = 'path\with\backslash.md' }
+        $result = Invoke-FakeRepoScript $root @{ SPECKIT_DIAGRAM_ROADMAP_PATH = 'path\with\backslash.md' }
         { Get-OutputJson $result.Stdout } | Should -Not -Throw
     }
 }
@@ -430,7 +430,7 @@ Describe 'T016: invalid max_findings — non-zero exit, no JSON' {
 
     It 'invalid max_findings via env var — exits non-zero with no JSON on stdout' {
         $root   = New-FakeRepo
-        $result = Invoke-FakeRepoScript $root @{ SPECKIT_ROADMAP_MAX_FINDINGS = 'notanumber' }
+        $result = Invoke-FakeRepoScript $root @{ SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS = 'notanumber' }
         $result.ExitCode | Should -Not -Be 0
         $result.Stdout   | Should -BeNullOrEmpty
     }
@@ -456,7 +456,7 @@ Describe 'T017: no-.specify-ancestor fallback — valid JSON with correct types'
         # through Start-Process argument lists on macOS.
         $dq          = [char]34
         $wrapPath    = Join-Path $script:SUITE_TMP "wrap_$(New-Guid).ps1"
-        $wrapContent = "`$env:SPECKIT_ROADMAP_PRD_GLOBS = 'path/with/${dq}quotes${dq}/glob.md'" + "`n" +
+        $wrapContent = "`$env:SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS = 'path/with/${dq}quotes${dq}/glob.md'" + "`n" +
                        "& '$($fbScriptPath.Replace("'","''"))'"
         [System.IO.File]::WriteAllText($wrapPath, $wrapContent)
 
