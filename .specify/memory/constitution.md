@@ -1,33 +1,23 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: (template / unversioned) → 1.0.0
-Bump rationale: MAJOR — first ratified constitution; replaces the unfilled
-  template skeleton with seven binding principles plus governing sections.
+Version change: 1.0.0 → 1.1.0
+Bump rationale: MINOR — adds a binding governance section defining the
+  Merge-Bounded Flow-Back Spec Persistence Model without redefining existing
+  principles.
 
-Principles (all newly defined):
-  I.    Canonical Conformance
-  II.   Determinism Split
-  III.  Non-Destructive & Idempotent
-  IV.   Roadmap as Durable Governance
-  V.    Cross-Platform Parity
-  VI.   Elicitation Completeness
-  VII.  Dogfood the Workflow
+Modified principles: none.
 
 Added sections:
-  - Technology Constraints & Packaging (non-binding tool choices)
-  - Development Workflow & Quality Gates
-  - Governance
+  - Spec Evolution and Merge-Bounded Persistence
 
-Removed sections: none (template placeholders replaced)
+Removed sections: none.
 
 Templates requiring review:
   ✅ .specify/memory/constitution.md (this file)
-  ✅ .specify/templates/plan-template.md — Constitution Check gate references these principles generically; no change required
-  ✅ .specify/templates/spec-template.md — no mandatory section added/removed by this constitution
-  ✅ .specify/templates/tasks-template.md — script/command parity tasks are covered by existing phase structure
+  ✅ Dependent templates and commands read the constitution at runtime; no changes required
 
-Deferred / TODO: none. Ratification date set to first-adoption date 2026-06-24.
+Deferred / TODO: none.
 
 Project note: this repository BUILDS a spec-kit extension (`speckit-roadmap`).
 The principles below govern how that extension is designed, built, and packaged.
@@ -149,6 +139,19 @@ If a constraint here ever conflicts with a Core Principle, the principle wins.
 - **Conformance check.** Before release, the extension MUST install and its hooks
   MUST fire in a real spec-kit project (dogfooded on this repo).
 
+## Spec Evolution and Merge-Bounded Persistence
+
+The project MUST use the Merge-Bounded Flow-Back Spec Persistence Model.
+
+- **One mutable change set**: Before a feature is merged, its `spec.md`, `plan.md`, `tasks.md`, and implementation MUST be treated as one mutable, reviewable unit.
+- **Changes flow back**: Accepted discoveries MAY originate in any artifact, but their consequences MUST be applied throughout the artifact set before work proceeds from the changed direction. A change to intended behavior MUST be reflected in `spec.md`; a change to technical approach MUST be reflected in `plan.md`; and a change to the required work MUST be reflected in `tasks.md`. Lower-level artifacts and implementation MUST NOT silently contradict higher-level intent.
+- **Scope requires acceptance**: Flow-back MUST NOT be used to introduce material scope without review. Independently valuable behavior, substantial scope expansion, or work requiring separate acceptance MUST be captured as a separate feature.
+- **Consistency gates implementation and merge**: After tasking or consequential artifact reconciliation, the agent MUST run `/speckit.analyze` before starting or resuming implementation. After implementation, the agent MUST use `/speckit.converge` until no gaps remain. Known divergence MUST block implementation or merge until it is reconciled or explicitly removed from scope.
+- **Merge freezes history**: Acceptance into the project's designated integration branch is the persistence boundary. After that merge, the feature directory MUST be treated as a semantically immutable historical record. Editorial corrections MAY improve presentation only when they do not alter meaning.
+- **Later changes flow forward**: A later requirement or behavioral change MUST be expressed in a new feature directory. The new feature MUST reference any earlier feature that it amends, replaces, or depends on when that relationship is material, and MUST NOT rewrite the earlier feature to describe the new outcome retroactively.
+
+**Rationale:** This model permits requirements and implementation knowledge to converge while a feature is being developed, makes the merged feature a coherent unit of review, and preserves an auditable sequence of accepted changes without rewriting project history.
+
 ## Governance
 
 This constitution supersedes other practices where they conflict.
@@ -163,4 +166,4 @@ This constitution supersedes other practices where they conflict.
 - **Precedence.** Where Technology Constraints and a Core Principle conflict, the
   principle wins.
 
-**Version**: 1.0.0 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-06-24
+**Version**: 1.1.0 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-08-30
