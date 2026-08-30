@@ -77,6 +77,6 @@ grilling that preceded this spec. This file consolidates the load-bearing decisi
 
 ## Out of scope (other specs)
 
-- release-please type / packaging (roadmap Q2) — the packaging spec.
+- automated release packaging (roadmap Q2) — the packaging spec.
 - brief / debrief / sync command behavior — their own specs.
 - Authoring ADRs — the deferred separate `speckit-adr` extension.

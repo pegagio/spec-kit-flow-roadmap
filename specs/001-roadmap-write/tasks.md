@@ -109,7 +109,7 @@ Report updated. (Validation = quickstart step 4.)
 ## Phase 6: Polish & Cross-Cutting (Conformance, CI, dogfood)
 
 - [X] T026 [P] Verify the `extension.yml` manifest entry: `speckit.roadmap.write` command, the `load-config.sh`/`.ps1` scripts, and the `config-template.yml` config are all declared correctly; `requires.speckit_version: ">=0.11.6"`.
-- [X] T027 [P] Author `.github/workflows/test.yml`: Bats on Linux AND macOS (bash 3.2 compatibility is a tested guarantee), Pester on Windows; run on push + PR.
+- [X] T027 [P] Author cross-platform CI for Bats on Linux and macOS and Pester on Windows. The workflow was later retired from the maintained repository; the local suites remain available.
 - [X] T028 Re-stage to `/tmp` and reinstall via `specify extension add /tmp/STAGE --dev --force` (NEVER `add .` from repo root); `specify extension enable roadmap`; confirm the deployed `speckit-roadmap-write` skill renders the installed script path correctly.
 - [X] T029 Dogfood validation per quickstart steps 3–5: create (interactive), amend (status bump → PATCH), and a non-interactive delegated run (gaps parked, no block). Confirm against SC-001/002/003/006/007.
 - [X] T030 Run the full quickstart steps 1–2 (config contract + suite) on this machine; confirm all tests pass and bash↔PowerShell parity MATCHES across all four fixtures.

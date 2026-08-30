@@ -106,8 +106,6 @@ tests/
 └── parity/
     └── parity.bats                   # asserts bash JSON == powershell JSON over shared fixtures
 
-.github/workflows/
-└── test.yml                          # CI: Bats on ubuntu, Pester on windows
 ```
 
 ### Decisions bound after critique (2026-06-24)
