@@ -1,18 +1,18 @@
 schema_version: '1.0'
 extension:
-  id: roadmap
-  name: Spec Roadmap
+  id: diagram-roadmap-kit
+  name: Diagram Roadmap Kit
   version: 0.1.0
   description: >-
     Capture a durable spec roadmap after the constitution, then review specs
     against it before and after implementation so spec-specific decisions,
     outcomes, and constraints are never lost.
-  author: srobroek
-  repository: https://github.com/srobroek/speckit-roadmap
+  author: pegagio
+  repository: https://github.com/pegagio/diagram-roadmap-kit
   license: Apache-2.0
-  homepage: https://github.com/srobroek/speckit-roadmap
+  homepage: https://github.com/pegagio/diagram-roadmap-kit
 requires:
-  speckit_version: '>=0.11.6'
+  speckit_version: '>=1.0.0'
 provides:
   commands:
     - name: speckit.roadmap.write

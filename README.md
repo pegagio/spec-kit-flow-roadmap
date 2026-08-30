@@ -1,4 +1,4 @@
-# speckit-roadmap
+# Diagram Roadmap Kit
 
 A [GitHub Spec Kit](https://github.com/github/spec-kit) extension that adds a **spec
 roadmap** to the workflow: written after the constitution, and reviewed before and after
@@ -57,33 +57,19 @@ write them.
 
 ## Install
 
-This extension is in the spec-kit community catalog, so install it by name:
+This extension is not in the spec-kit community catalog, so it must be installed from a local checkout:
 
 ```bash
-specify extension add roadmap
-specify extension enable roadmap
-```
-
-To pin a specific release instead, install from its archive:
-
-```bash
-specify extension add --from https://github.com/srobroek/speckit-roadmap/archive/refs/tags/v0.1.0.zip
-specify extension enable roadmap
-```
-
-From a local checkout (for development):
-
-```bash
-git clone https://github.com/srobroek/speckit-roadmap
-specify extension add ./speckit-roadmap --dev --force
-specify extension enable roadmap
+git clone https://github.com/pegagio/diagram-roadmap-kit
+specify extension add ./diagram-roadmap-kit --dev
+specify extension enable diagram-roadmap-kit
 ```
 
 If you're developing this extension *inside* a spec-kit project, install from a copy of the
 source rather than the repo root — installing a directory into its own
 `.specify/extensions/` will recurse.
 
-Requires spec-kit `>= 0.11.6`.
+Requires spec-kit `>= 1.0.0`.
 
 ## Configuration
 
@@ -117,6 +103,18 @@ bats tests/parity/parity.bats
 pwsh -NoProfile -Command "Invoke-Pester -Path tests/powershell/load-config.Tests.ps1"
 ```
 
+## Project Origins
+
+Diagram Roadmap Kit is an independent derivative of [speckit-roadmap](https://github.com/srobroek/speckit-roadmap), originally created and maintained by [srobroek](https://github.com/srobroek).
+
+This project began from the `speckit-roadmap` codebase and preserves its original Git history so that the authorship and development history of the inherited work remain intact.
+
+Diagram Roadmap Kit is maintained as an independent project and is not intended to remain compatible with `speckit-roadmap`. Future upstream development may be reviewed for ideas, fixes, or other useful developments, but upstream changes are not expected to be merged directly.
+
+The original project and its contributors retain authorship and copyright in their respective contributions. Subsequent modifications and original work in Diagram Roadmap Kit are authored by this project's contributors.
+
 ## License
 
-Apache-2.0. See [LICENSE](LICENSE).
+Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE).
+
+Diagram Roadmap Kit contains work derived from `speckit-roadmap`, also licensed under Apache-2.0.
