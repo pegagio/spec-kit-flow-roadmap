@@ -1,22 +1,34 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.4.0 → 1.5.0
-Bump rationale: MINOR — adds the Diagram Roadmap identity-migration feature and
-  reconciles current command, installation, project, and repository naming.
+Version change: 1.5.1 → 1.5.2
+Bump rationale: PATCH — resolves the existing open questions with confirmed current
+  behavior and clarifications, without adding scope or changing governance.
 
-Changes this revision (1.5.0, amended 2026-08-30):
-  - Added entry 008 for the flow-forward rename from speckit-roadmap/roadmap to
-    Diagram Roadmap/diagram-roadmap.
-  - Updated current command and installed-path references to
-    speckit.diagram-roadmap.* and .specify/extensions/diagram-roadmap/.
-  - Verified entry 008 through a disposable Spec Kit 1.0.1 installation, exact
-    payload and generated-skill checks, hook checks, and installed Bash execution.
-  - Preserved merged feature directories, the dated sync report, and released
-    changelog history under their accepted original terminology.
+Changes this revision (1.5.2, amended 2026-08-31):
+  - Resolved Q1: roadmap and spec numbering are not currently required to align;
+    existing specs will not be renumbered, and enforcement is deferred to a later
+    extension update.
+  - Resolved Q2: the four commands were correctly implemented as separate specs.
+  - Resolved Q3: the current extension targets Spec Kit >=1.0.0, as confirmed by
+    both source and installed manifests.
+  - Resolved Q4: the Bash command script reference uses the Spec Kit-compliant
+    `load-config.sh` filename that exists on disk.
+  - Removed obsolete Q5.
+  - Resolved Q6: absence of a `Spec dir` pointer is the process/bootstrap-entry
+    marker and exempts the entry from phantom detection.
 
-Specs affected: 008
-Open questions added/resolved: none.
+Specs affected: none (cross-cutting clarifications only)
+Open questions added/resolved: Q1–Q6 resolved or removed; none remain.
+
+--- Prior revision (1.5.1, amended 2026-08-31): PATCH — changed entry 007 from
+    planned to abandoned; preserved its intended outcome and scope as history;
+    retired its dependency edge without changing C-01 or C-07.
+
+--- Prior revision (1.5.0, amended 2026-08-30): MINOR — added entry 008 for the
+    flow-forward rename to Diagram Roadmap/diagram-roadmap; updated current command,
+    installation, project, and repository naming; verified the installed identity;
+    preserved accepted historical terminology.
 
 --- Prior revision (1.4.0, amended 2026-06-24): MINOR — after spec 004 verified.
     005 roadmap.sync → verified; scope-in gained the divergence taxonomy,
@@ -87,7 +99,8 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
   spec-kit extension shape (valid `extension.yml`; `commands/` whose `name:` is the
   full `speckit.{id}.{cmd}` slug; paired bash + PowerShell scripts; `templates/`;
   `config-template.yml`; README + CHANGELOG + LICENSE). Ground truth is spec-kit
-  docs then real bundled extensions (`critique`, `verify`).
+  docs then real bundled extensions (`critique`, `verify`). The current manifest
+  requires Spec Kit `>=1.0.0`.
 - **C-02 — Determinism split (Constitution II):** deterministic mechanics
   (path/feature resolution, prereq checks, JSON output contracts, version/changelog
   arithmetic, file-existence checks) live in scripts; judgment (elicitation,
@@ -119,9 +132,10 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 
 ## Planned Specs
 
-<!-- THE LEDGER. Spec numbers are a planning sequence; they do NOT yet correspond
-     to specs/NNN-* directories (none exist yet). Status reflects the current
-     task-list state at draft time. -->
+<!-- THE LEDGER. Roadmap numbers are planning identifiers and the current extension
+     does not require or guarantee that they match specs/NNN-* directory numbers.
+     Existing spec directories will not be renumbered; a later extension update may
+     enforce consistency, and roadmap identifiers may be reconsidered then. -->
 
 ### Core extension
 
@@ -166,8 +180,9 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 - **Notes:** Built via the full SDD cycle (specify → plan → critique → tasks →
   implement → verify → debrief). The debrief surfaced that PowerShell parity landed
   here rather than in a separate spec; entry 006 is absorbed into this one (see v1.1.0
-  Sync Impact Report). Resolves former Q4 (script path → installed
-  `.specify/extensions/diagram-roadmap/...` path).
+  Sync Impact Report). Resolves former Q4: the installed Bash script path is
+  `.specify/extensions/diagram-roadmap/scripts/bash/load-config.sh`, and the
+  Spec Kit-compliant filename present on disk is authoritative.
 
 ### 003 — roadmap.brief (pre-implementation review)  [status: verified]
 
@@ -252,20 +267,25 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
   the decision history per the Non-Destructive principle.
   `tests/` is currently a `.gitkeep` placeholder.
 
-### 007 — Release packaging  [status: planned]
+### 007 — Release packaging  [status: abandoned]
 
 - **Description:** Release-readiness artifacts: README, CHANGELOG, LICENSE
   (Apache-2.0), and release-please automation; final conformance check that the
   extension installs and hooks fire in a real spec-kit project.
-- **Outcome:** The extension is publishable — docs present, changelog automated,
-  Apache-2.0 license shipped, and dogfooded install/hook-fire verified.
-- **Scope (in):** README.md, CHANGELOG.md, LICENSE, release-please config, final
-  conformance/dogfood gate.
+- **Outcome:** ~~The extension is publishable — docs present, changelog automated,
+  Apache-2.0 license shipped, and dogfooded install/hook-fire verified.~~ _Forgone —
+  release packaging will not be pursued._
+- **Scope (in):** ~~README.md, CHANGELOG.md, LICENSE, release-please config, final
+  conformance/dogfood gate.~~ _No active scope; entry abandoned._
 - **Scope (out):** feature behavior of the four commands.
-- **Depends on:** 002, 003, 004, 005, 006.
+- **Depends on:** ~~002, 003, 004, 005, 006.~~ _None — dependency edge retired with
+  this abandoned entry._
 - **Governed by:** C-01, C-07.
 - **Notes:** Maps to task "Add release-please + README/CHANGELOG/LICENSE". LICENSE
-  exists at the repo root already; README/CHANGELOG for the extension still pending.
+  exists at the repo root already; README/CHANGELOG for the extension were still
+  pending when this entry was planned. **Abandoned 2026-08-31:** the project decided
+  not to pursue release packaging. This status change does not amend C-01 or C-07;
+  any future release requires new roadmap work or an explicit governance amendment.
 
 ### 008 — Rename project identity  [status: verified]
 
@@ -280,40 +300,8 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 
 ## Open Questions
 
-<!-- Genuine gaps the draft could not resolve from harvested context. These were
-     NOT fabricated into ledger content. Resolve into the ledger as decisions firm. -->
-
-- **Q1 — Spec numbering vs. directory mapping:** the 001–007 numbers above are a
-  planning sequence; no `specs/NNN-*` directories exist yet. Confirm whether each
-  ledger item becomes one `/speckit.specify` feature (and thus one `specs/` dir) or
-  whether some are bundled. Resolves the `spec dir:` fields.
-- **Q2 — Granularity of the four commands:** should the four commands ship as one
-  spec (matching the single task "Implement full extension: 4 commands + script +
-  tests") or as separate specs (002–005 as drafted)? This changes the ledger
-  grouping and dependency edges. Evidence: how the user intends to run
-  `/speckit.specify`.
-- **Q3 — Target spec-kit version & validation method:** `extension.yml` requires
-  `speckit_version >=0.11.6`. Confirm the canonical reference extensions/version to
-  validate conformance against (constitution names `critique`, `verify`).
-- **Q4 — Script path discrepancy (found while drafting):** the draft command body /
-  skill reference `.specify/scripts/bash/load-config.sh`, but the working script is
-  at `scripts/bash/load-config.sh` (repo root) and mirrored at
-  `.specify/extensions/diagram-roadmap/scripts/bash/load-config.sh`. The documented path
-  does not exist. Confirm the intended canonical path so 002/006 align.
-- **Q5 — Stale agent context files:** ~~`CLAUDE.md` and `AGENTS.md` embed the unfilled
-  constitution template~~ **RESOLVED 2026-06-24** — refreshed via `apm compile` to the
-  ratified v1.0.0 constitution.
-- **Q6 — Process/bootstrap-entry phantom-exemption (NEW, from the sync dogfood):** Entry
-  001 (Bootstrap) has a lifecycle status (`implemented`) but no `spec dir:` pointer and no
-  `specs/` directory, because it is a process/bootstrap step rather than a numbered spec.
-  Strict status-gating would mis-flag it as a phantom. The sync command now exempts entries
-  with no `spec dir:` pointer (treats them as informational "process entries"). Confirm this
-  convention and whether bootstrap-style entries should carry an explicit marker.
-
-> **Partially resolved:** Q2 (granularity) → per-command specs (002–005 each own a spec).
-> Q4 (script path) → commands reference the installed `.specify/extensions/diagram-roadmap/...` path
-> via `{SCRIPT}` frontmatter. Q1 (numbering) remains: roadmap entry N ≠ spec-dir N; matched
-> by title/`spec dir:` pointer for now.
+None. Q1–Q6 were resolved or removed on 2026-08-31; their durable conclusions are
+recorded in the ledger, Constraints & Decisions, and Cross-Cutting Notes.
 
 ## Cross-Cutting Notes
 
@@ -328,7 +316,16 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
   artifact, non-destructively.
 - **Source of truth is the repo root**, mirrored into `.specify/extensions/diagram-roadmap/`
   for the installed/dogfooded copy. Keep both in sync when editing commands/scripts.
+- **Roadmap and spec numbering are independent in the current version.** Existing
+  spec directories will not be renumbered. Matching uses explicit `Spec dir`
+  pointers and titles; a later extension update should remedy the lack of enforced
+  numbering consistency, potentially by renumbering roadmap identifiers.
+- **Command features may use separate specs.** Entries 002–005 were intentionally
+  implemented in separate feature directories rather than one combined spec.
+- **Process entries are explicit by omission.** A lifecycle entry with no `Spec dir`
+  pointer, such as bootstrap entry 001, is informational process work and is exempt
+  from phantom-entry detection.
 
 ---
 
-**Version**: 1.5.0 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-08-30
+**Version**: 1.5.2 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-08-31
