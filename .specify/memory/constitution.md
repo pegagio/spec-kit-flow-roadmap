@@ -1,29 +1,29 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.1.0 → 2.0.0
-Bump rationale: MAJOR — redefines the platform and scripting principle by ending
-  Windows, Bash, and PowerShell support in favor of macOS/Linux and Python.
+Version change: 2.0.0 → 2.0.1
+Bump rationale: PATCH — removes obsolete references to retired scripting
+  implementations while preserving the Python-only platform contract.
 
 Modified principles:
-  - I. Canonical Conformance (removed the paired Bash/PowerShell requirement)
-  - V. Cross-Platform Parity → Supported Platforms and Python Scripting
+  - V. Supported Platforms and Python Scripting (removed stale implementation and migration wording)
+
+Modified sections:
+  - Technology Constraints & Packaging
+  - Development Workflow & Quality Gates
 
 Added sections: none.
 
 Removed sections: none.
 
-Removed commitments:
-  - Windows support
-  - Bash and PowerShell runtime scripts and parity
+Removed references:
+  - Retired scripting implementations and their completed migration work
 
 Templates requiring review:
   ✅ .specify/memory/constitution.md (this file)
   ✅ Dependent templates and commands read the constitution at runtime; no changes required
 
-Deferred / TODO:
-  - Migrate current Bash and PowerShell scripts, command references, tests, and
-    documentation through the roadmap's planned Python migration spec.
+Deferred / TODO: none.
 
 Project note: this repository BUILDS the Diagram Roadmap spec-kit extension (`diagram-roadmap`).
 The principles below govern how that extension is designed, built, and packaged.
@@ -84,7 +84,7 @@ pre/post reviews check against.
 
 ### V. Supported Platforms and Python Scripting
 
-The extension MUST support macOS and Linux. Windows support is explicitly not a goal. Every extension-owned runtime script and maintained automation script MUST be written in Python, and extension commands MUST NOT require Bash or PowerShell at runtime. Bash and PowerShell implementations, wrappers, parity requirements, and platform-specific script frontmatter MUST NOT be maintained. Existing Bash and PowerShell scripts and their dependent tests, command references, and current documentation MUST be migrated to Python and removed before the next release.
+The extension MUST support macOS and Linux. Windows support is explicitly not a goal. Every extension-owned runtime script and maintained automation script MUST be written in Python, and extension commands MUST use platform-neutral Python interfaces at runtime.
 *Rationale:* one portable scripting language keeps deterministic behavior and tests consistent across the supported platforms without the cost and drift of parallel shell implementations.
 
 ### VI. Elicitation Completeness
@@ -115,7 +115,7 @@ document, provided the principles still hold:
   `enable`; source of truth lives at the repository root
   (`extension.yml`, `commands/`, `scripts/`, `templates/`, `config-template.yml`).
 - **Supported platforms:** macOS and Linux. Windows compatibility is out of scope.
-- **Scripts:** Python, emitting stable JSON contracts where structured output is required. The extension MUST NOT ship or require Bash or PowerShell scripts.
+- **Scripts:** Python, emitting stable JSON contracts where structured output is required.
 - **Hooks:** `after_constitution` (create roadmap), `before_implement`
   (pre-implementation review), `after_implement` (post-implementation review).
 - **License:** Apache-2.0.
@@ -128,7 +128,7 @@ If a constraint here ever conflicts with a Core Principle, the principle wins.
   is written after the constitution and consulted before/after each spec.
 - **Constitution check.** Every plan MUST include a constitution check verifying the
   seven principles hold for the work proposed.
-- **Script/command tests.** Deterministic Python scripts MUST have automated tests on macOS and Linux. Review commands MUST be demonstrated read-only. Validation MUST confirm that the shipped extension has no Bash or PowerShell runtime dependency.
+- **Script/command tests.** Deterministic Python scripts MUST have automated tests on macOS and Linux. Review commands MUST be demonstrated read-only. Validation MUST confirm that the shipped extension's runtime scripts are Python.
 - **Conformance check.** Before release, the extension MUST install and its hooks
   MUST fire in a real spec-kit project (dogfooded on this repo).
 
@@ -159,4 +159,4 @@ This constitution supersedes other practices where they conflict.
 - **Precedence.** Where Technology Constraints and a Core Principle conflict, the
   principle wins.
 
-**Version**: 2.0.0 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-08-31
+**Version**: 2.0.1 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-09-01
