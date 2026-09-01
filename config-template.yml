@@ -2,6 +2,8 @@
 # Copy this file to roadmap-config.yml and customize as needed.
 # All values are optional; the defaults below are applied when a key is absent.
 # Environment variables (SPECKIT_DIAGRAM_ROADMAP_*) override file values.
+# Unknown keys, wrong types, malformed YAML, absolute paths, traversal, and
+# symlink escapes are rejected. Roadmap and ADR paths must be project-relative.
 
 roadmap:
   # Where the roadmap artifact lives. Default keeps it beside the constitution
@@ -20,7 +22,7 @@ prd:
   # Glob patterns used to DETECT product-requirement documents anywhere in the repo.
   # General detection — not coupled to any single PRD tool. Detected PRDs are
   # referenced (addresses: ...) and may pre-fill goals/outcomes; never authored.
-  # Env override: SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS (comma-separated)
+  # Env override: SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS (one CSV record; quote commas)
   globs:
     - "**/prd*.md"
     - "**/PRD*.md"

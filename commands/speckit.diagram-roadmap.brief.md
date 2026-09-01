@@ -1,8 +1,7 @@
 ---
 description: Read-only pre-implementation briefing — surface what the roadmap expects for the spec about to be implemented (outcome, scope, governing decisions, dependencies) and flag pre-implementation drift.
 scripts:
-  sh: .specify/extensions/diagram-roadmap/scripts/bash/load-config.sh
-  ps: .specify/extensions/diagram-roadmap/scripts/powershell/load-config.ps1
+  py: .specify/extensions/diagram-roadmap/scripts/python/load_config.py
 ---
 
 ## User Input
@@ -32,11 +31,7 @@ and flag any way the spec has already drifted from what the roadmap anticipated.
 
 ## Outline
 
-1. Run `{SCRIPT}` from the repo root (the loader substitutes the correct
-   platform-specific `load-config` path from this command's `scripts:` frontmatter);
-   parse `roadmap_path`, `roadmap_exists`, `adr_dir`, `adr_present`. Resolve the active
-   feature via the core `.specify/scripts/bash/check-prerequisites.sh --json --paths-only`
-   script.
+1. Run `{SCRIPT}` from the repo root and parse `roadmap_path`, `roadmap_exists`, `adr_dir`, and `adr_present`. Resolve the active feature via the core `.specify/scripts/python/check_prerequisites.py --json --paths-only` script. If either script fails, abort and relay its error.
 
 2. **Graceful preconditions:**
    - If `roadmap_exists` is false → report that no roadmap exists and suggest
@@ -44,7 +39,7 @@ and flag any way the spec has already drifted from what the roadmap anticipated.
    - If no active feature can be resolved → ask the user which spec to brief (do not
      guess).
 
-3. **Match the active spec to its ledger entry**, in this order (tolerating the known
+3. Immediately before reading the roadmap, run `{SCRIPT} --validate-path roadmap-read <roadmap_path>` and use only the returned canonical path. **Match the active spec to its ledger entry**, in this order (tolerating the known
    drift between roadmap entry numbers and `specs/NNN-*` directory numbers):
    1. by `spec dir:` pointer in an entry,
    2. else by title similarity,
@@ -57,7 +52,7 @@ and flag any way the spec has already drifted from what the roadmap anticipated.
 4. **Surface the entry's recorded intent** into the report's *Surfaced Context* section:
    description, outcome, scope (in/out), `depends-on` (and the **current status of each
    dependency** — flag any that are `abandoned` or missing), `governed-by`
-   decisions/constraints (resolve `ADR-NNNN` pointers only if `adr_present`; otherwise
+   decisions/constraints (when `adr_present`, immediately before listing or reading the ADR directory run `{SCRIPT} --validate-path adr <adr_dir>` and use only the returned canonical directory to resolve `ADR-NNNN` pointers; otherwise
    note them as unresolved links), `addresses` PRD pointer, and related Open Questions /
    Cross-Cutting Notes.
 

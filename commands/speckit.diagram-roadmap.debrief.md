@@ -1,8 +1,7 @@
 ---
 description: Read-only post-implementation review — check the implemented spec against its roadmap entry's outcome and scope, classify any drift, and propose marking the entry verified.
 scripts:
-  sh: .specify/extensions/diagram-roadmap/scripts/bash/load-config.sh
-  ps: .specify/extensions/diagram-roadmap/scripts/powershell/load-config.ps1
+  py: .specify/extensions/diagram-roadmap/scripts/python/load_config.py
 ---
 
 ## User Input
@@ -31,22 +30,19 @@ wrong" from "the roadmap is stale."
 
 ## Outline
 
-1. Run `{SCRIPT}` from the repo root (the loader substitutes the correct platform-specific
-   `load-config` path from this command's `scripts:` frontmatter); parse `roadmap_path`,
-   `roadmap_exists`, `adr_dir`, `adr_present`. Resolve the active feature via the core
-   `.specify/scripts/bash/check-prerequisites.sh --json --paths-only` script.
+1. Run `{SCRIPT}` from the repo root and parse `roadmap_path`, `roadmap_exists`, `adr_dir`, and `adr_present`. Resolve the active feature via the core `.specify/scripts/python/check_prerequisites.py --json --paths-only` script. If either script fails, abort and relay its error.
 
 2. **Graceful preconditions:**
    - If `roadmap_exists` is false → report that and suggest `/speckit.diagram-roadmap.write`. Stop.
    - If no active feature resolves → ask which spec to debrief (do not guess).
 
-3. **Match the implemented spec to its ledger entry** (spec-dir → title → number,
+3. Immediately before reading the roadmap, run `{SCRIPT} --validate-path roadmap-read <roadmap_path>` and use only the returned canonical path. **Match the implemented spec to its ledger entry** (spec-dir → title → number,
    tolerating numbering drift). If none matches → report the spec is not on the roadmap and
    suggest adding it; stop. If the match is **ambiguous** → list candidates and ask.
 
 4. **Read the inputs to compare**: the matched entry (outcome, scope in/out, `governed-by`),
    `spec.md`, and the **implemented artifacts referenced by the spec's scope/tasks** (keep
-   the review bounded — do not scan the whole repository).
+   the review bounded — do not scan the whole repository). When `adr_present`, immediately before listing or reading the ADR directory run `{SCRIPT} --validate-path adr <adr_dir>` and use only the returned canonical directory.
 
 5. **Classify drift** (each finding gets a severity 🎯/💡/🤔):
    - **outcome-miss** — the implementation does not deliver the entry's stated outcome. A

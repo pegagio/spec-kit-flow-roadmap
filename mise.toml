@@ -1,5 +1,6 @@
 [tools]
 jq = "latest"
+python = "3.11.16"
 "pipx:specify-cli" = "1.0.1"
 
 [tasks]

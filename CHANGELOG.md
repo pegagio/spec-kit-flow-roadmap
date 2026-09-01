@@ -11,6 +11,8 @@ maintained explicitly.
 
 - Renamed the project to Diagram Roadmap, the extension ID to `diagram-roadmap`, and the command namespace to `speckit.diagram-roadmap.*`.
 - Updated the intended repository name to `spec-kit-diagram-roadmap` and aligned installed paths, documentation, and tests with the new extension ID.
+- Replaced the maintained Bash and PowerShell loaders with one Python 3.11.16 implementation, narrowed supported platforms to macOS and Linux, and made Windows support an explicit non-goal.
+- Added strict PyYAML configuration validation, fail-closed project containment, access-time path validation, and one Python contract suite for both supported operating systems.
 
 ## 0.1.0 (2026-06-24)
 

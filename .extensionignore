@@ -15,9 +15,6 @@ templates/*
 !templates/review-report-template.md
 !scripts/**
 scripts/*
-!scripts/bash/**
-scripts/bash/*
-!scripts/bash/load-config.sh
-!scripts/powershell/**
-scripts/powershell/*
-!scripts/powershell/load-config.ps1
+!scripts/python/**
+scripts/python/*
+!scripts/python/load_config.py

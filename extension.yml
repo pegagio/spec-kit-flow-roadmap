@@ -12,7 +12,7 @@ extension:
   license: Apache-2.0
   homepage: https://github.com/pegagio/spec-kit-diagram-roadmap
 requires:
-  speckit_version: '>=1.0.0'
+  speckit_version: '==1.0.1'
 provides:
   commands:
     - name: speckit.diagram-roadmap.write
@@ -32,12 +32,8 @@ provides:
         Read-only reconciliation: detect drift between the roadmap ledger and
         specs on disk
   scripts:
-    - name: load-config-bash
-      file: scripts/bash/load-config.sh
-      description: Load and validate roadmap extension configuration; emit a JSON contract
-      executable: true
-    - name: load-config-powershell
-      file: scripts/powershell/load-config.ps1
+    - name: load-config-python
+      file: scripts/python/load_config.py
       description: Load and validate roadmap extension configuration; emit a JSON contract
       executable: true
   config:

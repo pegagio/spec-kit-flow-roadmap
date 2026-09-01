@@ -1,23 +1,29 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.0.0 → 1.1.0
-Bump rationale: MINOR — adds a binding governance section defining the
-  Merge-Bounded Flow-Back Spec Persistence Model without redefining existing
-  principles.
+Version change: 1.1.0 → 2.0.0
+Bump rationale: MAJOR — redefines the platform and scripting principle by ending
+  Windows, Bash, and PowerShell support in favor of macOS/Linux and Python.
 
-Modified principles: none.
+Modified principles:
+  - I. Canonical Conformance (removed the paired Bash/PowerShell requirement)
+  - V. Cross-Platform Parity → Supported Platforms and Python Scripting
 
-Added sections:
-  - Spec Evolution and Merge-Bounded Persistence
+Added sections: none.
 
 Removed sections: none.
+
+Removed commitments:
+  - Windows support
+  - Bash and PowerShell runtime scripts and parity
 
 Templates requiring review:
   ✅ .specify/memory/constitution.md (this file)
   ✅ Dependent templates and commands read the constitution at runtime; no changes required
 
-Deferred / TODO: none.
+Deferred / TODO:
+  - Migrate current Bash and PowerShell scripts, command references, tests, and
+    documentation through the roadmap's planned Python migration spec.
 
 Project note: this repository BUILDS the Diagram Roadmap spec-kit extension (`diagram-roadmap`).
 The principles below govern how that extension is designed, built, and packaged.
@@ -37,14 +43,7 @@ spec and its implementation against the roadmap.
 
 ### I. Canonical Conformance
 
-The extension MUST match real spec-kit extension conventions exactly. Ground truth,
-in priority order: (1) the spec-kit documentation, (2) real bundled extensions
-(e.g. `critique`, `verify`). The extension MUST ship a valid `extension.yml`
-(`schema_version`, `extension`, `requires`, `provides`, `hooks`, `tags`),
-command files under `commands/` whose `name:` is the full `speckit.{id}.{cmd}`
-slug, paired `scripts/bash/` + `scripts/powershell/` scripts where scripts are
-used, a `templates/` directory for generated-artifact skeletons, a
-`config-template.yml`, and `README.md` + `CHANGELOG.md` + `LICENSE`.
+The extension MUST match real spec-kit extension conventions exactly within its supported platform contract. Ground truth, in priority order: (1) the spec-kit documentation, (2) real bundled extensions (e.g. `critique`, `verify`). The extension MUST ship a valid `extension.yml` (`schema_version`, `extension`, `requires`, `provides`, `hooks`, `tags`), command files under `commands/` whose `name:` is the full `speckit.{id}.{cmd}` slug, Python scripts where scripts are used, a `templates/` directory for generated-artifact skeletons, a `config-template.yml`, and `README.md` + `CHANGELOG.md` + `LICENSE`.
 *Rationale:* an extension that deviates from the loader's expected shape will not
 install, register, or hook correctly; conformance is what makes it work at all.
 
@@ -83,14 +82,10 @@ merely a task list.
 otherwise lost between features; the roadmap is the institutional memory that the
 pre/post reviews check against.
 
-### V. Cross-Platform Parity
+### V. Supported Platforms and Python Scripting
 
-Every shipped script MUST exist as a bash (`.sh`) and PowerShell (`.ps1`) pair with
-equivalent behavior and identical output contracts. Commands MUST function on macOS,
-Linux, and Windows. The `scripts.sh` / `scripts.ps1` frontmatter pair MUST reference
-both.
-*Rationale:* spec-kit users run all three platforms; a bash-only extension silently
-breaks for Windows users and fails canonical conformance.
+The extension MUST support macOS and Linux. Windows support is explicitly not a goal. Every extension-owned runtime script and maintained automation script MUST be written in Python, and extension commands MUST NOT require Bash or PowerShell at runtime. Bash and PowerShell implementations, wrappers, parity requirements, and platform-specific script frontmatter MUST NOT be maintained. Existing Bash and PowerShell scripts and their dependent tests, command references, and current documentation MUST be migrated to Python and removed before the next release.
+*Rationale:* one portable scripting language keeps deterministic behavior and tests consistent across the supported platforms without the cost and drift of parallel shell implementations.
 
 ### VI. Elicitation Completeness
 
@@ -119,8 +114,8 @@ document, provided the principles still hold:
 - **Distribution:** a spec-kit extension installed via `specify extension add` /
   `enable`; source of truth lives at the repository root
   (`extension.yml`, `commands/`, `scripts/`, `templates/`, `config-template.yml`).
-- **Scripts:** POSIX-compatible bash and PowerShell 7+, emitting JSON on a `--json`
-  flag, reusing core `.specify/scripts/bash/common.sh` helpers where appropriate.
+- **Supported platforms:** macOS and Linux. Windows compatibility is out of scope.
+- **Scripts:** Python, emitting stable JSON contracts where structured output is required. The extension MUST NOT ship or require Bash or PowerShell scripts.
 - **Hooks:** `after_constitution` (create roadmap), `before_implement`
   (pre-implementation review), `after_implement` (post-implementation review).
 - **License:** Apache-2.0.
@@ -133,9 +128,7 @@ If a constraint here ever conflicts with a Core Principle, the principle wins.
   is written after the constitution and consulted before/after each spec.
 - **Constitution check.** Every plan MUST include a constitution check verifying the
   seven principles hold for the work proposed.
-- **Script/command tests.** Deterministic scripts MUST have parity tests (bash and
-  PowerShell produce the same JSON contract). Review commands MUST be demonstrated
-  read-only.
+- **Script/command tests.** Deterministic Python scripts MUST have automated tests on macOS and Linux. Review commands MUST be demonstrated read-only. Validation MUST confirm that the shipped extension has no Bash or PowerShell runtime dependency.
 - **Conformance check.** Before release, the extension MUST install and its hooks
   MUST fire in a real spec-kit project (dogfooded on this repo).
 
@@ -166,4 +159,4 @@ This constitution supersedes other practices where they conflict.
 - **Precedence.** Where Technology Constraints and a Core Principle conflict, the
   principle wins.
 
-**Version**: 1.1.0 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-08-30
+**Version**: 2.0.0 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-08-31

@@ -1,3 +1,11 @@
 # Tests
 
-This directory contains the test suite for the deterministic `load-config` scripts (bash and PowerShell). Only the deterministic scripts are unit-tested; the `write` command body is judgment-based (Constitution Principle II) and is validated by the dogfood/quickstart workflow, not unit tests. The `tests/bash/fixtures/` directory holds four shared YAML configs used by all bash tests: `valid.yml` (all keys set, includes a value with embedded double-quotes to exercise JSON escaping), `missing.yml` (empty/comments-only, exercises all built-in defaults), `env.yml` (minimal, used with `SPECKIT_DIAGRAM_ROADMAP_*` env-var override tests), and `invalid.yml` (non-numeric `max_findings`, exercises the error path). Run the bash suite from the repo root with `bats tests/bash/load-config.bats` (requires Bats 1.5+ and python3). The `tests/` tree is excluded from the installed extension copy — it is not in the staged file set used by `specify extension add` and will not appear in consumer projects.
+This directory contains the standard-library `unittest` suite for the deterministic Python configuration loader, command contracts, disposable installation, and repository dogfood installation. The suite covers runtime transfer, strict YAML, configuration precedence, containment, stable output, packaging, and current-reference boundaries on macOS and Linux. Judgment-bearing command behavior is validated through the dogfood scenarios in `specs/006-python-script-migration/quickstart.md` rather than unit tests.
+
+Run the complete suite from the repository root:
+
+```text
+just test
+```
+
+The direct command is `mise exec -- python -m unittest discover -s tests/python -p 'test_*.py'`. Shared YAML fixtures live under `tests/fixtures/`. The complete `tests/` tree is development-only and is excluded from installed extension payloads.

@@ -5,5 +5,5 @@ adr:
   dir: "docs/adr/"
 
 report:
-  # Non-numeric max_findings — should cause load-config.sh to exit non-zero.
+  # Non-numeric max_findings — the Python loader must reject this value.
   max_findings: abc

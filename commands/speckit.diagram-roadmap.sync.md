@@ -1,8 +1,7 @@
 ---
 description: Read-only reconciliation — detect drift between the roadmap ledger and the specs on disk (orphans, phantom entries, status drift, dependency contradictions, superseded ADRs).
 scripts:
-  sh: .specify/extensions/diagram-roadmap/scripts/bash/load-config.sh
-  ps: .specify/extensions/diagram-roadmap/scripts/powershell/load-config.ps1
+  py: .specify/extensions/diagram-roadmap/scripts/python/load_config.py
 ---
 
 ## User Input
@@ -28,15 +27,13 @@ on-demand, project-wide check (unlike the per-spec brief/debrief hooks).
 
 ## Outline
 
-1. Run `{SCRIPT}` from the repo root (the loader substitutes the correct platform-specific
-   `load-config` path from this command's `scripts:` frontmatter); parse `roadmap_path`,
-   `roadmap_exists`, `adr_dir`, `adr_present`.
+1. Run `{SCRIPT}` from the repo root and parse `roadmap_path`, `roadmap_exists`, `adr_dir`, and `adr_present`. If the script fails, abort and relay its error.
 
 2. **Graceful preconditions:** if `roadmap_exists` is false → report that and suggest
    `/speckit.diagram-roadmap.write`; stop. If `specs/` is empty or absent → note "no specs on disk"
    (pre-commitment entries are still fine) and continue.
 
-3. Read the roadmap ledger. Enumerate the spec directories on disk by listing `specs/*/`.
+3. Immediately before reading the roadmap, run `{SCRIPT} --validate-path roadmap-read <roadmap_path>` and use only the returned canonical path. Read the roadmap ledger and enumerate the spec directories on disk by listing `specs/*/`. When `adr_present`, immediately before listing or reading the ADR directory run `{SCRIPT} --validate-path adr <adr_dir>` and use only the returned canonical directory.
 
 4. **Reconcile the WHOLE ledger, with STATUS as the pivot** for disk-existence expectations:
    - `undecided` / `needs-info` / `planned` (pre-commitment) → **no** spec dir expected. If a

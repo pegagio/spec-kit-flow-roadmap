@@ -1,25 +1,30 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 1.5.1 → 1.5.2
-Bump rationale: PATCH — resolves the existing open questions with confirmed current
-  behavior and clarifications, without adding scope or changing governance.
+Version change: 2.0.0 → 2.0.1
+Bump rationale: PATCH — marks the completed Python migration verified and records
+  its feature-directory and validation evidence.
 
-Changes this revision (1.5.2, amended 2026-08-31):
-  - Resolved Q1: roadmap and spec numbering are not currently required to align;
-    existing specs will not be renumbered, and enforcement is deferred to a later
-    extension update.
-  - Resolved Q2: the four commands were correctly implemented as separate specs.
-  - Resolved Q3: the current extension targets Spec Kit >=1.0.0, as confirmed by
-    both source and installed manifests.
-  - Resolved Q4: the Bash command script reference uses the Spec Kit-compliant
-    `load-config.sh` filename that exists on disk.
-  - Removed obsolete Q5.
-  - Resolved Q6: absence of a `Spec dir` pointer is the process/bootstrap-entry
-    marker and exempts the entry from phantom detection.
+Changes this revision (2.0.1, amended 2026-09-01):
+  - Changed entry 009 from planned to verified after implementation, convergence,
+    and the macOS/Linux validation matrix completed successfully.
+  - Added the `specs/006-python-script-migration/` pointer and verification evidence
+    to entry 009.
 
-Specs affected: none (cross-cutting clarifications only)
-Open questions added/resolved: Q1–Q6 resolved or removed; none remain.
+Specs affected: 009
+Open questions added/resolved: none.
+
+--- Prior revision (2.0.0, amended 2026-08-31): MAJOR — reversed the Windows and
+    paired Bash/PowerShell platform decision, adopted macOS/Linux and Python, and
+    added the required migration spec. Replaced the platform contract in C-01,
+    C-05, and C-07; marked former parity decisions superseded without rewriting
+    verified historical specs; and added planned entry 009. Specs affected: 009
+    added; 002 and 006 retained as historical implementation records. Open
+    questions added/resolved: none.
+
+--- Prior revision (1.5.2, amended 2026-08-31): PATCH — resolved Q1–Q6 or
+    removed them as obsolete; recorded current numbering, command-spec,
+    compatibility, loader-path, and process-entry behavior.
 
 --- Prior revision (1.5.1, amended 2026-08-31): PATCH — changed entry 007 from
     planned to abandoned; preserved its intended outcome and scope as history;
@@ -85,9 +90,8 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 - **Pre- and post-implementation reviews** that read the roadmap and check the spec
   about to be / just built against its recorded outcome and scope — strictly
   read-only, proposing changes rather than applying them.
-- The extension is **dogfooded on its own repository** (built through
-  constitution → roadmap → specify → plan → tasks → implement) before release, and
-  ships with cross-platform (bash + PowerShell) parity and Apache-2.0 licensing.
+- The extension is **dogfooded on its own repository** (built through constitution → roadmap → specify → plan → tasks → implement) before release and ships with Apache-2.0 licensing. The former cross-platform Bash/PowerShell parity end state was superseded on 2026-08-31.
+- The extension supports **macOS and Linux**, uses **Python as its only maintained scripting language**, and does not target Windows or retain Bash/PowerShell runtime compatibility.
 
 ## Constraints & Decisions
 
@@ -95,12 +99,7 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
      present, so none of these link out yet. Stable ids let spec entries reference
      them. -->
 
-- **C-01 — Canonical conformance (Constitution I):** the extension MUST match real
-  spec-kit extension shape (valid `extension.yml`; `commands/` whose `name:` is the
-  full `speckit.{id}.{cmd}` slug; paired bash + PowerShell scripts; `templates/`;
-  `config-template.yml`; README + CHANGELOG + LICENSE). Ground truth is spec-kit
-  docs then real bundled extensions (`critique`, `verify`). The current manifest
-  requires Spec Kit `>=1.0.0`.
+- **C-01 — Canonical conformance (Constitution I):** the extension MUST match real spec-kit extension shape within its supported platform contract (valid `extension.yml`; `commands/` whose `name:` is the full `speckit.{id}.{cmd}` slug; Python scripts where scripts are used; `templates/`; `config-template.yml`; README + CHANGELOG + LICENSE). Ground truth is spec-kit docs then real bundled extensions (`critique`, `verify`). The current manifest requires Spec Kit `>=1.0.0`. **Superseded 2026-08-31:** this decision formerly required paired Bash + PowerShell scripts.
 - **C-02 — Determinism split (Constitution II):** deterministic mechanics
   (path/feature resolution, prereq checks, JSON output contracts, version/changelog
   arithmetic, file-existence checks) live in scripts; judgment (elicitation,
@@ -115,20 +114,12 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
   project-level artifact beside the constitution (default
   `.specify/memory/roadmap.md`, overridable via `config-template.yml`), carries
   constitution-style semver + Sync Impact Report, and survives across features.
-- **C-05 — Cross-platform parity (Constitution V):** every shipped script exists as
-  a `.sh` + `.ps1` pair with equivalent behavior and identical JSON output
-  contracts; the `scripts.sh` / `scripts.ps1` frontmatter references both; commands
-  work on macOS, Linux, Windows.
+- **C-05 — Supported platforms and Python scripting (Constitution V):** the extension supports macOS and Linux; Windows support is explicitly not a goal. Python is the only maintained scripting language. Extension commands MUST NOT ship or require Bash or PowerShell runtime scripts, compatibility wrappers, paired implementations, or platform-specific parity. **Superseded 2026-08-31:** this decision formerly required `.sh` + `.ps1` pairs, paired frontmatter, and macOS/Linux/Windows behavior.
 - **C-06 — Elicitation completeness, no fabrication (Constitution VI):** the draft
   command actively asks for end states, goals, scope (in/out), outcomes, and
   constraints where the constitution did not settle them, and never invents content
   — unknowns become explicit Open Questions or `needs-info`/`undecided` entries.
-- **C-07 — Packaging & distribution (Technology Constraints):** distributed as a
-  spec-kit extension; source of truth at the repo root; scripts are POSIX bash +
-  PowerShell 7+ emitting JSON on a `--json` flag, reusing core
-  `.specify/scripts/bash/common.sh` helpers where appropriate; hooks are
-  `after_constitution` / `before_implement` / `after_implement`; license Apache-2.0.
-  Non-binding: if it conflicts with a principle, the principle wins.
+- **C-07 — Packaging & distribution (Technology Constraints):** distributed as a spec-kit extension; source of truth at the repo root; scripts are Python and emit stable JSON contracts where structured output is required; hooks are `after_constitution` / `before_implement` / `after_implement`; license Apache-2.0. Non-binding: if it conflicts with a principle, the principle wins. **Superseded 2026-08-31:** this decision formerly selected POSIX Bash + PowerShell 7+ and reuse of core Bash helpers.
 
 ## Planned Specs
 
@@ -298,6 +289,17 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 - **Spec dir:** specs/005-rename-project-identity/
 - **Notes:** This entry flows the later identity change forward while preserving the accepted terminology of earlier features. Verified by a disposable Spec Kit 1.0.1 installation, exact payload and generated-skill checks, hook registration checks, and installed Bash loader execution; Bats and PowerShell were unavailable locally.
 
+### 009 — Migrate scripts to Python  [status: verified]
+
+- **Description:** Flow the new platform and scripting policy forward by replacing the extension's current Bash and PowerShell automation with Python and removing Windows support.
+- **Outcome:** On macOS and Linux, all four commands install and execute with equivalent deterministic configuration and prerequisite behavior through Python, the established JSON configuration contract remains stable, and the shipped extension has no Bash or PowerShell runtime dependency.
+- **Scope (in):** Select and document the supported Python runtime contract; replace `scripts/bash/load-config.sh` and `scripts/powershell/load-config.ps1` with a Python loader; migrate command script frontmatter and any Bash prerequisite resolution; update `extension.yml`, the installed dogfood snapshot, current tests and fixtures, task-runner configuration, README, and other current documentation; remove obsolete Bash/PowerShell source and tests; validate on macOS and Linux.
+- **Scope (out):** Windows compatibility; Bash or PowerShell wrappers; parallel implementations or parity tests; behavior changes to roadmap synthesis or review judgment; retroactive edits to merged feature directories, dated reports, or historical changelog entries.
+- **Depends on:** 008.
+- **Governed by:** C-01, C-02, C-03, C-05, C-07.
+- **Spec dir:** specs/006-python-script-migration/
+- **Notes:** The exact supported Python version and invocation details are selected during specification and planning against the active Spec Kit contract. The migration MUST preserve current configuration precedence, validation, path containment, output fields, exit behavior, and non-destructive command semantics unless the new spec explicitly changes them. **Verified 2026-09-01:** all 36 tasks completed; 77 tests passed on macOS and Linux with Specify CLI 1.0.1, Python 3.11.16, and PyYAML 6.0.3; the exact installed payload, generated skills, hooks, and bounded dogfood scenarios passed. See `specs/006-python-script-migration/validation-evidence.md` and `specs/006-python-script-migration/roadmap-reviews/debrief-20260901T143917Z.md`.
+
 ## Open Questions
 
 None. Q1–Q6 were resolved or removed on 2026-08-31; their durable conclusions are
@@ -307,10 +309,7 @@ recorded in the ledger, Constraints & Decisions, and Cross-Cutting Notes.
 
 <!-- Architecture-level notes spanning multiple specs. -->
 
-- **Determinism split is the recurring shape.** Every command (002–005) pairs a thin
-  deterministic script (path resolution, prereq + existence checks, JSON contract,
-  version/changelog arithmetic) with a judgment-bearing command body. Any new script
-  carries the C-05 cross-platform-parity obligation within its own spec.
+- **Determinism split is the recurring shape.** Every command (002–005) pairs deterministic automation (path resolution, prerequisite and existence checks, JSON contracts, version/changelog arithmetic) with a judgment-bearing command body. Entry 009 migrates that automation to Python under C-05.
 - **Read-only is the default for reviews.** brief/debrief/sync (003/004/005) must
   emit reports and PROPOSE edits only; only `write` (002) writes, and only the roadmap
   artifact, non-destructively.
@@ -325,7 +324,8 @@ recorded in the ledger, Constraints & Decisions, and Cross-Cutting Notes.
 - **Process entries are explicit by omission.** A lifecycle entry with no `Spec dir`
   pointer, such as bootstrap entry 001, is informational process work and is exempt
   from phantom-entry detection.
+- **Platform boundary is intentional.** macOS and Linux are the supported operating systems. Windows, Bash, and PowerShell compatibility are non-goals; merged specs and dated reports retain earlier references only as historical evidence.
 
 ---
 
-**Version**: 1.5.2 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-08-31
+**Version**: 2.0.1 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-09-01

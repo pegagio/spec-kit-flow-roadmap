@@ -16,6 +16,14 @@ Thumbs.db
 .env.*
 !.env.example
 
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+dist/
+*.egg-info/
+
 # Fastembed
 .fastembed_cache
 

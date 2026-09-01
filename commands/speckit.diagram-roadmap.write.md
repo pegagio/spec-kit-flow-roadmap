@@ -1,8 +1,7 @@
 ---
 description: Create or amend the project spec roadmap after the constitution — capturing spec-specific decisions, outcomes, constraints, and the intent of specs not yet written so they are not lost.
 scripts:
-  sh: .specify/extensions/diagram-roadmap/scripts/bash/load-config.sh
-  ps: .specify/extensions/diagram-roadmap/scripts/powershell/load-config.ps1
+  py: .specify/extensions/diagram-roadmap/scripts/python/load_config.py
 ---
 
 ## User Input
@@ -40,19 +39,13 @@ the template; if it exists, amend it non-destructively and bump its version.
 
 ## Outline
 
-1. Run `{SCRIPT}` from the repo root and parse its JSON: `roadmap_path`,
-   `roadmap_exists`, `adr_dir`, `adr_present`, `prd_globs`. All paths are relative
-   to the repo root. (The loader substitutes the correct platform-specific `load-config`
-   path from this command's `scripts:` frontmatter.) If the script fails, abort and relay
-   its error.
+1. Run `{SCRIPT}` from the repo root and parse its JSON: `roadmap_path`, `roadmap_exists`, `adr_dir`, `adr_present`, `prd_globs`. All paths are relative to the repo root. If the script fails, abort and relay its error. Treat the initial result as configuration only: every concrete content path is revalidated immediately before each access as described below.
 
 2. **Harvest existing context** (read, in priority order — do not re-ask what these
    already answer):
    - `.specify/memory/constitution.md` — the principles just established.
-   - Detected ADRs under `adr_dir` (if `adr_present`) — record `governed-by:`
-     pointers; do not re-litigate settled decisions.
-   - Detected PRD(s) matching `prd_globs` — harvest goals/outcomes/scope; record
-     `addresses:` pointers.
+   - Detected ADRs under `adr_dir` (if `adr_present`) — immediately before listing or reading the directory, run `{SCRIPT} --validate-path adr <adr_dir>` and use only the returned canonical path; record `governed-by:` pointers and do not re-litigate settled decisions.
+   - Detected PRD(s) matching `prd_globs` — anchor matching at the project root and, immediately before reading each concrete match, run `{SCRIPT} --validate-path prd <matched-path>` and use only the returned canonical path; harvest goals/outcomes/scope and record `addresses:` pointers.
    - **Live session context** — if this command runs in the same session as the
      constitution or a grilling/brainstorming discussion, that discussion is
      already available; harvest it rather than re-asking.
@@ -82,11 +75,10 @@ the template; if it exists, amend it non-destructively and bump its version.
      gaps per step 3.
    - In interactive mode, present the harvested + proposed content for the user to
      confirm or correct before writing.
-   - Write the roadmap to `roadmap_path` at **version 1.0.0**, ratified today, with
-     a completed Sync Impact Report.
+   - Immediately before creating the roadmap, run `{SCRIPT} --validate-path roadmap-write <roadmap_path>` and write only to the returned canonical path. Write it at **version 1.0.0**, ratified today, with a completed Sync Impact Report.
 
    **If it DOES exist (amend):**
-   - Read the current roadmap. **Integrity check first (FR-011a):** confirm it has the
+   - Immediately before reading the current roadmap, run `{SCRIPT} --validate-path roadmap-read <roadmap_path>` and read only the returned canonical path. **Integrity check first (FR-011a):** confirm it has the
      required structure — a Sync Impact Report comment, the expected sections, and a
      `**Version**: X.Y.Z | **Ratified**: … | **Last Amended**: …` footer. If it is
      unparseable, hand-corrupted, or missing required structure, **STOP**: report
@@ -107,7 +99,7 @@ the template; if it exists, amend it non-destructively and bump its version.
        constraint/decision, a new Open Question, or a material scope change.
      - **PATCH** — status transitions and wording/clarifications (the common case).
      - If the bump type is ambiguous, state your reasoning before finalizing.
-   - Update the Sync Impact Report and the `**Last Amended**` date.
+   - Update the Sync Impact Report and the `**Last Amended**` date. Immediately before writing the amendment, run `{SCRIPT} --validate-path roadmap-write <roadmap_path>` and write only to the returned canonical path.
 
 5. **Report** to the user: created vs amended, the version (and bump rationale if
    amended), the spec entries and their statuses, and any Open Questions /

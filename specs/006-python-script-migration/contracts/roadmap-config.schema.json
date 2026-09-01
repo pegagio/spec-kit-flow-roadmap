@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/pegagio/spec-kit-diagram-roadmap/specs/006-python-script-migration/contracts/roadmap-config.schema.json",
+  "title": "Diagram Roadmap project configuration",
+  "description": "Strict YAML-compatible data model for roadmap-config.yml. YAML null and empty scalar values fall through during precedence resolution.",
+  "type": ["object", "null"],
+  "additionalProperties": false,
+  "properties": {
+    "roadmap": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "type": ["string", "null"],
+          "description": "Project-relative roadmap file. Empty or null falls through; a non-empty value is validated for canonical project containment."
+        }
+      }
+    },
+    "adr": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "dir": {
+          "type": ["string", "null"],
+          "description": "Project-relative ADR directory. Empty or null falls through; a non-empty value is validated for canonical project containment."
+        }
+      }
+    },
+    "prd": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "globs": {
+          "type": ["array", "null"],
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Ordered project-bounded patterns. An explicit empty list is valid and replaces lower-precedence lists."
+        }
+      }
+    },
+    "report": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "max_findings": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Maximum findings count. Zero is valid; YAML booleans are rejected by runtime exact-type validation."
+        }
+      }
+    }
+  },
+  "x-yaml-validation": "Reject duplicate keys, aliases, merge keys, unsafe tags, multiple documents, malformed input, and inputs larger than the documented bound before applying this structure.",
+  "x-unknown-keys": "Unknown top-level or nested keys are errors and produce no configuration output."
+}

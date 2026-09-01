@@ -59,7 +59,7 @@ write them.
 
 This extension is not in the spec-kit community catalog, so it must be installed from a local checkout:
 
-```bash
+```text
 git clone https://github.com/pegagio/spec-kit-diagram-roadmap
 specify extension add ./spec-kit-diagram-roadmap --dev
 specify extension enable diagram-roadmap
@@ -69,13 +69,13 @@ If you're developing this extension *inside* a spec-kit project, install from a 
 source rather than the repo root — installing a directory into its own
 `.specify/extensions/` will recurse.
 
-Requires spec-kit `>= 1.0.0`.
+Requires Specify CLI 1.0.1 exactly. The extension supports macOS and Linux; Windows support is not a goal. Runtime scripts use the active Specify installation's Python 3.11.16 environment and its PyYAML 6.0-or-newer dependency.
 
 ## Migrating an existing local installation
 
 The `diagram-roadmap` identity is a clean break from the former `roadmap` extension. Preserve the existing configuration, remove the old extension, install the renamed source, compare the preserved values with the new scaffold, and enable the new identity:
 
-```bash
+```text
 specify extension remove roadmap --keep-config
 specify extension add /path/to/spec-kit-diagram-roadmap --dev
 diff -u .specify/extensions/diagram-roadmap/roadmap-config.yml .specify/extensions/roadmap/roadmap-config.yml
@@ -90,6 +90,8 @@ Run the `cp` step only after reviewing the diff. Once the renamed commands and c
 Copy `config-template.yml` to `.specify/extensions/diagram-roadmap/roadmap-config.yml` and edit.
 Everything is optional; `SPECKIT_DIAGRAM_ROADMAP_*` environment variables override the file.
 
+Configured roadmap and ADR locations must be project-relative and contained within the active project. Unknown keys, malformed YAML, unsafe YAML features, wrong types, absolute paths, traversal, and symlink escapes fail closed with no configuration JSON. `SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS` is one CSV record, so quote a pattern when it contains a comma.
+
 | Key | Default | Meaning |
 |-----|---------|---------|
 | `roadmap.path` | `.specify/memory/roadmap.md` | Where the roadmap lives |
@@ -99,22 +101,15 @@ Everything is optional; `SPECKIT_DIAGRAM_ROADMAP_*` environment variables overri
 
 ## How it's built
 
-- **Scripts vs. judgment.** The one shipped script, `load-config` (bash + PowerShell), only
-  resolves config and paths — it's deterministic and unit-tested (Bats + Pester, plus a
-  bash/PowerShell output-parity test). Everything that requires judgment — elicitation, drift
-  detection, review reasoning — lives in the command bodies, which are checked by using them,
-  not by unit tests.
-- **Cross-platform.** Both `load-config` implementations produce the same output; CI runs the
-  bash tests on Linux and macOS and the PowerShell tests on Windows.
+- **Scripts vs. judgment.** The one shipped Python script resolves the active Specify runtime, configuration, paths, containment, and structured output. Everything that requires judgment—elicitation, drift detection, and review reasoning—lives in the command bodies and is checked through dogfood scenarios.
+- **Supported platforms.** The same Python contract suite runs on macOS and Linux. The extension does not ship compatibility wrappers or alternate Windows, Bash, or PowerShell runtimes.
 - **Self-hosted.** This extension was built with spec-kit and reviewed against its own
   roadmap. See `specs/` and `.specify/memory/roadmap.md`.
 
 ## Development
 
-```bash
-bats tests/bash/load-config.bats
-bats tests/parity/parity.bats
-pwsh -NoProfile -Command "Invoke-Pester -Path tests/powershell/load-config.Tests.ps1"
+```text
+just test
 ```
 
 ## Project Origins
