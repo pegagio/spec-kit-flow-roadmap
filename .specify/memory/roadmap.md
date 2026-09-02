@@ -1,18 +1,19 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.0.0 → 2.0.1
-Bump rationale: PATCH — marks the completed Python migration verified and records
-  its feature-directory and validation evidence.
+Version change: 2.1.0 → 2.2.0
+Bump rationale: MINOR — records the accepted clean-install dependency scope for entry 010 and marks the completed mise migration verified.
 
-Changes this revision (2.0.1, amended 2026-09-01):
-  - Changed entry 009 from planned to verified after implementation, convergence,
-    and the macOS/Linux validation matrix completed successfully.
-  - Added the `specs/006-python-script-migration/` pointer and verification evidence
-    to entry 009.
+Changes this revision (2.2.0, amended 2026-09-02):
+  - Refined entry 010's scope after clean Linux validation proved mise's `pipx:` backend requires a declared `uv` or `pipx` installer; recorded pinned `uv` and the explicit Python/`uv` installation dependency as accepted in-scope tooling.
+  - Changed entry 010 from planned to verified after all 17 tasks, convergence, protected-surface checks, and macOS/Linux validation completed successfully.
 
-Specs affected: 009
+Specs affected: 010 amended and verified
 Open questions added/resolved: none.
+
+--- Prior revision (2.1.0, amended 2026-09-01): MINOR — added C-08, establishing mise as the canonical project toolchain and task runner; added planned entry 010 to preserve the real test workflow in mise, remove the Just scaffolding, and align current documentation and contract tests. Specs affected: 010 added. Open questions added/resolved: none.
+
+--- Prior revision (2.0.1, amended 2026-09-01): PATCH — marked the completed Python migration verified and recorded its feature-directory and validation evidence. Changed entry 009 from planned to verified after implementation, convergence, and the macOS/Linux validation matrix completed successfully; added the `specs/006-python-script-migration/` pointer and verification evidence to entry 009. Specs affected: 009. Open questions added/resolved: none.
 
 --- Prior revision (2.0.0, amended 2026-08-31): MAJOR — reversed the Windows and
     paired Bash/PowerShell platform decision, adopted macOS/Linux and Python, and
@@ -120,6 +121,7 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
   constraints where the constitution did not settle them, and never invents content
   — unknowns become explicit Open Questions or `needs-info`/`undecided` entries.
 - **C-07 — Packaging & distribution (Technology Constraints):** distributed as a spec-kit extension; source of truth at the repo root; scripts are Python and emit stable JSON contracts where structured output is required; hooks are `after_constitution` / `before_implement` / `after_implement`; license Apache-2.0. Non-binding: if it conflicts with a principle, the principle wins. **Superseded 2026-08-31:** this decision formerly selected POSIX Bash + PowerShell 7+ and reuse of core Bash helpers.
+- **C-08 — Canonical project tooling:** `mise.toml` is the canonical declaration of development tool versions and project task entrypoints. Maintained development documentation and validation MUST use `mise run <task>` rather than duplicate workflows through Just or another task runner. Canonical tasks MUST execute real project workflows; placeholder tasks that report success without doing work are not retained.
 
 ## Planned Specs
 
@@ -300,6 +302,17 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 - **Spec dir:** specs/006-python-script-migration/
 - **Notes:** The exact supported Python version and invocation details are selected during specification and planning against the active Spec Kit contract. The migration MUST preserve current configuration precedence, validation, path containment, output fields, exit behavior, and non-destructive command semantics unless the new spec explicitly changes them. **Verified 2026-09-01:** all 36 tasks completed; 77 tests passed on macOS and Linux with Specify CLI 1.0.1, Python 3.11.16, and PyYAML 6.0.3; the exact installed payload, generated skills, hooks, and bounded dogfood scenarios passed. See `specs/006-python-script-migration/validation-evidence.md` and `specs/006-python-script-migration/roadmap-reviews/debrief-20260901T143917Z.md`.
 
+### 010 — Make mise the canonical project tool  [status: verified]
+
+- **Description:** Consolidate development tool versions and executable project workflows under mise, replacing the remaining Just-based task-runner surface.
+- **Outcome:** Contributors install the declared toolchain with mise and run the complete Python contract suite through `mise run test`; current documentation, task configuration, and repository contract tests agree that mise is the sole canonical project task runner.
+- **Scope (in):** Add a real `test` task to `mise.toml` using the existing Python contract-suite command; remove the `justfile`; replace current `just test` guidance with `mise run test`; update current-surface tests so they validate `mise.toml`; review the existing mise tool declarations and retain only declarations with a current project purpose; pin `uv` as the installer required by mise's `pipx:` backend and make the Specify CLI declaration depend on the pinned Python and `uv` tools; validate clean installation, mise task configuration, the complete test suite, and repository whitespace.
+- **Scope (out):** Rewriting merged feature directories, dated reports, or released changelog history; changing extension runtime behavior or supported platforms; introducing another task runner, framework, or build system; ~~introducing any dependency~~ (**superseded 2026-09-02:** required clean-install tooling is in scope); introducing a dependency unrelated to declared tooling setup and validation; preserving placeholder `build`, `dev`, or `clean` tasks; creating a lint task without a repository-owned lint configuration.
+- **Depends on:** 009.
+- **Governed by:** C-01, C-02, C-05, C-08.
+- **Spec dir:** specs/007-adopt-mise-tooling/
+- **Notes:** Preserve the functional behavior of the existing `just test` recipe, not the Just wrapper. A mise task runs inside the mise-managed environment and should invoke `python` directly rather than nesting `mise exec`. Historical evidence that records `just test` remains unchanged under the merge-bounded persistence policy. **Verified 2026-09-02:** all 17 tasks completed; convergence found no gaps; the exact one-task inventory, disabled task auto-install, clean setup, failure propagation, missing-tool non-bootstrap behavior, and all 80 tests passed on macOS and Linux with Python 3.11.16, `uv` 0.12.5, and Specify CLI 1.0.1; protected history, runtime, packaging, generated skills, and dogfood payload matched their pre-implementation baseline. See `specs/007-adopt-mise-tooling/quickstart.md` and `specs/007-adopt-mise-tooling/roadmap-reviews/debrief-20260902T144140Z.md`.
+
 ## Open Questions
 
 None. Q1–Q6 were resolved or removed on 2026-08-31; their durable conclusions are
@@ -325,7 +338,8 @@ recorded in the ledger, Constraints & Decisions, and Cross-Cutting Notes.
   pointer, such as bootstrap entry 001, is informational process work and is exempt
   from phantom-entry detection.
 - **Platform boundary is intentional.** macOS and Linux are the supported operating systems. Windows, Bash, and PowerShell compatibility are non-goals; merged specs and dated reports retain earlier references only as historical evidence.
+- **Development tooling has one canonical surface.** mise owns project tool versions and task entrypoints; current contributor documentation uses `mise run`, while accepted historical artifacts retain the commands that were current when their work was verified.
 
 ---
 
-**Version**: 2.0.1 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-09-01
+**Version**: 2.2.0 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-09-02

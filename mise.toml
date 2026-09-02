@@ -1,6 +1,11 @@
 [tools]
-jq = "latest"
 python = "3.11.16"
-"pipx:specify-cli" = "1.0.1"
+uv = "0.12.5"
+"pipx:specify-cli" = { version = "1.0.1", depends = ["python", "uv"] }
 
-[tasks]
+[settings.task]
+run_auto_install = false
+
+[tasks.test]
+description = "Run the complete Python contract suite"
+run = "python -m unittest discover -s tests/python -p 'test_*.py'"

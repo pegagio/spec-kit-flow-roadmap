@@ -108,9 +108,15 @@ Configured roadmap and ADR locations must be project-relative and contained with
 
 ## Development
 
+From the repository root, review `mise.toml` before trusting it. Then prepare the declared toolchain and run the canonical complete contract suite as separate actions:
+
 ```text
-just test
+mise trust mise.toml
+mise install
+mise run test
 ```
+
+The test task does not trust configuration or install missing tools. Resolve setup failures explicitly before rerunning validation.
 
 ## Project Origins
 
