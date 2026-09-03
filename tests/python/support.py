@@ -15,6 +15,7 @@ import unittest
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 SOURCE_LOADER = REPOSITORY_ROOT / "scripts" / "python" / "load_config.py"
+SOURCE_REVIEW_CONTRACT = REPOSITORY_ROOT / "scripts" / "python" / "review_contract.py"
 DEFAULT_MANIFEST = """\
 schema_version: '1.0'
 extension:
@@ -58,6 +59,9 @@ class LoaderLayout:
         self.loader.parent.mkdir(parents=True)
         if SOURCE_LOADER.exists():
             shutil.copy2(SOURCE_LOADER, self.loader)
+        self.review_contract = self.payload / "scripts" / "python" / "review_contract.py"
+        if SOURCE_REVIEW_CONTRACT.exists():
+            shutil.copy2(SOURCE_REVIEW_CONTRACT, self.review_contract)
         self.manifest = self.payload / "extension.yml"
         self.manifest.write_text(DEFAULT_MANIFEST, encoding="utf-8")
         self.configuration = (
@@ -116,6 +120,69 @@ class LoaderLayout:
             capture_output=True,
             check=False,
         )
+
+    def run_review(
+        self,
+        *arguments: str,
+        input_text: str | None = None,
+        environment: dict[str, str] | None = None,
+    ) -> subprocess.CompletedProcess[str]:
+        """Run the review helper with the same isolated process environment."""
+        child_environment = os.environ.copy()
+        for name in tuple(child_environment):
+            if name.startswith("SPECKIT_DIAGRAM_ROADMAP_") or name == "PYTHONPATH":
+                child_environment.pop(name)
+        child_environment.update({"PATH": f"{self.bin_directory}{os.pathsep}{os.environ.get('PATH', '')}", "HOME": os.environ.get("HOME", str(self.root)), "LANG": "C.UTF-8"})
+        if environment:
+            child_environment.update(environment)
+        return subprocess.run(
+            [sys.executable, str(self.review_contract), *arguments],
+            cwd=self.root,
+            env=child_environment,
+            input=input_text,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+
+class GitRepository:
+    """A disposable Git repository for deterministic review-contract tests."""
+
+    def __init__(self) -> None:
+        self._temporary_directory = tempfile.TemporaryDirectory()
+        self.root = Path(self._temporary_directory.name) / "repository"
+        self.root.mkdir()
+        self.run("init", "-q")
+        self.run("config", "user.name", "Test User")
+        self.run("config", "user.email", "test@example.invalid")
+
+    def cleanup(self) -> None:
+        """Remove the disposable repository."""
+        self._temporary_directory.cleanup()
+
+    def run(self, *arguments: str, check: bool = True) -> subprocess.CompletedProcess[str]:
+        """Run Git with stable output settings."""
+        return subprocess.run(
+            ["git", *arguments],
+            cwd=self.root,
+            text=True,
+            capture_output=True,
+            check=check,
+        )
+
+    def write(self, relative: str, content: str) -> Path:
+        """Write one UTF-8 fixture file below the repository root."""
+        path = self.root / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content, encoding="utf-8")
+        return path
+
+    def commit_all(self, message: str) -> str:
+        """Commit all state and return the immutable commit identifier."""
+        self.run("add", "--all")
+        self.run("commit", "-q", "-m", message)
+        return self.run("rev-parse", "HEAD").stdout.strip()
 
 
 class LoaderTestCase(unittest.TestCase):

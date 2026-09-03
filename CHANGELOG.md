@@ -13,6 +13,8 @@ maintained explicitly.
 - Updated the intended repository name to `spec-kit-diagram-roadmap` and aligned installed paths, documentation, and tests with the new extension ID.
 - Replaced the maintained Bash and PowerShell loaders with one Python 3.11.16 implementation, narrowed supported platforms to macOS and Linux, and made Windows support an explicit non-goal.
 - Added strict PyYAML configuration validation, fail-closed project containment, access-time path validation, and one Python contract suite for both supported operating systems.
+- Hardened all four command contracts with repository-contained untrusted evidence, explicit target precedence, attributable implementation deltas, shared findings and lifecycle rules, complete report provenance, and collision-safe report allocation.
+- Added the deterministic Python review helper while preserving the configuration loader's six-field contract, and expanded source, installation, generated-skill, protected-history, and dogfood validation.
 
 ## 0.1.0 (2026-06-24)
 

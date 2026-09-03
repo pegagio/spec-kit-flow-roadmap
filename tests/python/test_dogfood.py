@@ -48,7 +48,10 @@ class DogfoodInstallationTest(unittest.TestCase):
         for skill in skills:
             with self.subTest(skill=skill.parent.name):
                 text = skill.read_text(encoding="utf-8")
-                self.assertIn("scripts/python/load_config.py", text)
+                if skill.parent.name.endswith("-write"):
+                    self.assertIn("scripts/python/load_config.py", text)
+                else:
+                    self.assertIn("scripts/python/review_contract.py", text)
         registry = (REPOSITORY_ROOT / ".specify" / "extensions.yml").read_text(encoding="utf-8")
         self.assertEqual(1, registry.count("after_constitution:"))
         self.assertEqual(1, registry.count("before_implement:"))

@@ -6,6 +6,14 @@ venv/
 dist/
 *.egg-info/
 
+# OS and editors
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/
+
 # Agents
 .claude/
 .codex/

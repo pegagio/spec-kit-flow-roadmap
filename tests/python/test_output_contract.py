@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 
-from support import LoaderTestCase
+from support import LoaderTestCase, REPOSITORY_ROOT
 
 
 class OutputContractTest(LoaderTestCase):
@@ -49,6 +49,12 @@ class OutputContractTest(LoaderTestCase):
         result = layout.run("--validate-path", "prd", "document.md")
         self.assert_success(result)
         self.assertEqual('{"path":"document.md"}\n', result.stdout)
+
+    def test_shared_report_template_has_complete_provenance_and_counts(self) -> None:
+        text = (REPOSITORY_ROOT / "templates" / "review-report-template.md").read_text(encoding="utf-8")
+        for expected in ("Selection source", "Match method", "Reviewed paths", "Baseline input / OID", "Dirty-state boundary", "Snapshot identity", "Configured cap", "Total / displayed / omitted", "Material limitations", "Lifecycle Recommendation", "sole permitted write"):
+            with self.subTest(expected=expected):
+                self.assertIn(expected, text)
 
 
 if __name__ == "__main__":

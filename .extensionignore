@@ -18,3 +18,4 @@ scripts/*
 !scripts/python/**
 scripts/python/*
 !scripts/python/load_config.py
+!scripts/python/review_contract.py

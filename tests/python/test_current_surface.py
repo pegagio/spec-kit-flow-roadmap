@@ -65,7 +65,7 @@ class CurrentSurfaceTest(unittest.TestCase):
             with self.subTest(unsupported=unsupported):
                 self.assertNotIn(unsupported, config.get("tasks", {}))
 
-    def test_extension_owns_only_the_python_runtime_script(self) -> None:
+    def test_extension_owns_only_the_two_python_runtime_scripts(self) -> None:
         scripts = sorted(
             path.relative_to(REPOSITORY_ROOT).as_posix()
             for path in (REPOSITORY_ROOT / "scripts").rglob("*")
@@ -73,7 +73,7 @@ class CurrentSurfaceTest(unittest.TestCase):
             and "__pycache__" not in path.parts
             and path.suffix != ".pyc"
         )
-        self.assertEqual(["scripts/python/load_config.py"], scripts)
+        self.assertEqual(["scripts/python/load_config.py", "scripts/python/review_contract.py"], scripts)
 
     def test_command_and_manifest_surfaces_have_no_legacy_runtime_paths(self) -> None:
         files = [REPOSITORY_ROOT / "extension.yml", REPOSITORY_ROOT / ".extensionignore", *(REPOSITORY_ROOT / "commands").glob("*.md")]
@@ -130,7 +130,10 @@ class CurrentSurfaceTest(unittest.TestCase):
         for skill in skills:
             with self.subTest(skill=skill.parent.name):
                 text = skill.read_text(encoding="utf-8")
-                self.assertIn("scripts/python/load_config.py", text)
+                if skill.parent.name.endswith("-write"):
+                    self.assertIn("scripts/python/load_config.py", text)
+                else:
+                    self.assertIn("scripts/python/review_contract.py", text)
                 self.assertNotIn("scripts/bash", text)
                 self.assertNotIn("scripts/powershell", text)
 

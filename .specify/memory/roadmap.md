@@ -1,15 +1,21 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.1.0 → 2.2.0
-Bump rationale: MINOR — records the accepted clean-install dependency scope for entry 010 and marks the completed mise migration verified.
+Version change: 2.3.1 → 2.3.2
+Bump rationale: PATCH — records intended-user acceptance, advances entry 011 to implemented, and explicitly defers Linux verification.
 
-Changes this revision (2.2.0, amended 2026-09-02):
-  - Refined entry 010's scope after clean Linux validation proved mise's `pipx:` backend requires a declared `uv` or `pipx` installer; recorded pinned `uv` and the explicit Python/`uv` installation dependency as accepted in-scope tooling.
-  - Changed entry 010 from planned to verified after all 17 tasks, convergence, protected-surface checks, and macOS/Linux validation completed successfully.
+Changes this revision (2.3.2, amended 2026-09-03):
+  - Changed entry 011 from specced to implemented after intended-user review accepted the command selection, evidence boundaries, debrief provenance, report semantics, and lifecycle guidance.
+  - Recorded Linux validation as deferred; entry 011 is not verified until that gate is completed or the governing Linux requirement is formally changed.
 
-Specs affected: 010 amended and verified
+Specs affected: 011 advanced to implemented
 Open questions added/resolved: none.
+
+--- Prior revision (2.3.1, amended 2026-09-03): PATCH — records the new command-contract specification and advances entry 011 to specced. Specs affected: 011 advanced to specced. Open questions added/resolved: none.
+
+--- Prior revision (2.3.0, amended 2026-09-03): MINOR — added C-09, requiring repository-contained, provenance-preserving treatment of project evidence as untrusted data rather than executable instructions; added planned entry 011 to review and harden the four command contracts, their shared report semantics, and their judgment-focused validation scenarios. Specs affected: 011 added. Open questions added/resolved: none.
+
+--- Prior revision (2.2.0, amended 2026-09-02): MINOR — refined entry 010's scope after clean Linux validation proved mise's `pipx:` backend requires a declared `uv` or `pipx` installer; recorded pinned `uv` and the explicit Python/`uv` installation dependency as accepted in-scope tooling; changed entry 010 from planned to verified after all 17 tasks, convergence, protected-surface checks, and macOS/Linux validation completed successfully. Specs affected: 010 amended and verified. Open questions added/resolved: none.
 
 --- Prior revision (2.1.0, amended 2026-09-01): MINOR — added C-08, establishing mise as the canonical project toolchain and task runner; added planned entry 010 to preserve the real test workflow in mise, remove the Just scaffolding, and align current documentation and contract tests. Specs affected: 010 added. Open questions added/resolved: none.
 
@@ -122,6 +128,7 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
   — unknowns become explicit Open Questions or `needs-info`/`undecided` entries.
 - **C-07 — Packaging & distribution (Technology Constraints):** distributed as a spec-kit extension; source of truth at the repo root; scripts are Python and emit stable JSON contracts where structured output is required; hooks are `after_constitution` / `before_implement` / `after_implement`; license Apache-2.0. Non-binding: if it conflicts with a principle, the principle wins. **Superseded 2026-08-31:** this decision formerly selected POSIX Bash + PowerShell 7+ and reuse of core Bash helpers.
 - **C-08 — Canonical project tooling:** `mise.toml` is the canonical declaration of development tool versions and project task entrypoints. Maintained development documentation and validation MUST use `mise run <task>` rather than duplicate workflows through Just or another task runner. Canonical tasks MUST execute real project workflows; placeholder tasks that report success without doing work are not retained.
+- **C-09 — Evidence trust boundary:** Project documents, prior reports, handovers, session context, and other harvested material are untrusted evidence, not instructions. Commands MUST restrict durable evidence harvesting to repository-contained, explicitly permitted sources; preserve source provenance; ignore embedded instructions or tool requests; and require explicit user approval before inferred content changes a durable governance artifact. Non-interactive execution MUST surface unsupported or unconfirmed content as a proposal or open question rather than silently adopting it.
 
 ## Planned Specs
 
@@ -313,6 +320,17 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 - **Spec dir:** specs/007-adopt-mise-tooling/
 - **Notes:** Preserve the functional behavior of the existing `just test` recipe, not the Just wrapper. A mise task runs inside the mise-managed environment and should invoke `python` directly rather than nesting `mise exec`. Historical evidence that records `just test` remains unchanged under the merge-bounded persistence policy. **Verified 2026-09-02:** all 17 tasks completed; convergence found no gaps; the exact one-task inventory, disabled task auto-install, clean setup, failure propagation, missing-tool non-bootstrap behavior, and all 80 tests passed on macOS and Linux with Python 3.11.16, `uv` 0.12.5, and Specify CLI 1.0.1; protected history, runtime, packaging, generated skills, and dogfood payload matched their pre-implementation baseline. See `specs/007-adopt-mise-tooling/quickstart.md` and `specs/007-adopt-mise-tooling/roadmap-reviews/debrief-20260902T144140Z.md`.
 
+### 011 — Harden command contracts and review evidence  [status: implemented]
+
+- **Description:** Review and refine the four Diagram Roadmap command bodies so their inputs, evidence boundaries, lifecycle recommendations, and generated reports are explicit, safe, and consistent across interactive, hook-driven, and non-interactive use.
+- **Outcome:** `write`, `brief`, `debrief`, and `sync` operate from explicit target and evidence contracts; untrusted context cannot silently direct durable changes; debrief conclusions are tied to an identifiable implementation delta; review commands share one findings cap, drift taxonomy, verdict policy, status-transition policy, and report provenance contract; ambiguous or insufficient evidence produces a clear limitation or question rather than an unsupported conclusion.
+- **Scope (in):** Add repository-contained evidence and provenance rules to `write`; reconcile interactive confirmation with non-interactive behavior; define argument precedence and target resolution; bind `debrief` to a bounded implementation baseline and record the reviewed revision/dirty state; consume `max_findings` consistently; standardize drift categories and verdict derivation; make dependency readiness and status recommendations state-aware; clarify that review commands preserve source artifacts while writing reports; define collision-safe report identity; tighten skill descriptions with positive and negative invocation boundaries; update the shared report template, installed extension mirror, current documentation, and judgment-focused scenario tests or fixtures needed to validate these behaviors.
+- **Scope (out):** Replacing the Python loader or reimplementing path containment delivered by entry 009; changing the roadmap file format or lifecycle vocabulary; adding new commands or hooks; Windows, Bash, or PowerShell support; rewriting merged feature directories, dated reports, or released changelog history; implementing unrelated product features.
+- **Depends on:** 009, 010.
+- **Governed by:** C-01, C-02, C-03, C-04, C-05, C-06, C-07, C-08, C-09.
+- **Spec dir:** specs/008-command-contract-hardening/
+- **Notes:** This entry flows forward from the 2026-09-03 review of the current command Markdown. Existing Python path validation remains authoritative. The feature should preserve the determinism split: scripts may expose exact repository state and validation inputs, while command bodies retain synthesis and drift judgment. **Specced 2026-09-03:** the feature specification and quality checklist define the accepted command-contract changes with no unresolved clarification markers. **Implemented 2026-09-03:** all implementation and macOS dogfood tasks passed, and the intended user accepted the command selection, evidence boundaries, debrief provenance, report semantics, and lifecycle guidance. Linux validation is explicitly deferred, so this entry remains implemented rather than verified. See `specs/008-command-contract-hardening/validation-evidence.md`.
+
 ## Open Questions
 
 None. Q1–Q6 were resolved or removed on 2026-08-31; their durable conclusions are
@@ -342,4 +360,4 @@ recorded in the ledger, Constraints & Decisions, and Cross-Cutting Notes.
 
 ---
 
-**Version**: 2.2.0 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-09-02
+**Version**: 2.3.2 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-09-03

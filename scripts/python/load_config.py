@@ -85,7 +85,7 @@ def _resolve_specify_interpreter() -> tuple[Path, Path, Path | None]:
     return invocation_path, canonical_path, expected_prefix
 
 
-def _establish_runtime() -> Any:
+def establish_runtime(script_path: Path | None = None) -> Any:
     """Transfer once to the isolated active Specify interpreter and import PyYAML."""
     invocation_path, canonical_path, expected_prefix = _resolve_specify_interpreter()
     try:
@@ -107,7 +107,7 @@ def _establish_runtime() -> Any:
         arguments = [
             str(invocation_path),
             "-I",
-            str(Path(__file__).resolve()),
+            str((script_path or Path(__file__)).resolve()),
             *sys.argv[1:],
         ]
         try:
@@ -124,6 +124,11 @@ def _establish_runtime() -> Any:
     if _version_tuple(getattr(yaml, "__version__", "")) < REQUIRED_PYYAML:
         raise ContractError("active Specify runtime requires PyYAML 6.0 or newer")
     return yaml
+
+
+def _establish_runtime() -> Any:
+    """Preserve the original private runtime entrypoint for compatibility."""
+    return establish_runtime()
 
 
 def _discover_roots() -> tuple[Path, Path]:
@@ -153,6 +158,19 @@ def _discover_roots() -> tuple[Path, Path]:
     return project_root, payload_root
 
 
+def discover_roots(script_path: Path | None = None) -> tuple[Path, Path]:
+    """Derive project and payload roots for a supported source or installed script."""
+    if script_path is None or script_path.resolve() == Path(__file__).resolve():
+        return _discover_roots()
+    script = script_path.resolve(strict=True)
+    if script.parent.name != "python" or script.parent.parent.name != "scripts":
+        raise ContractError("script is outside a supported source or installed layout")
+    payload_candidate = script.parents[2]
+    if payload_candidate.name == "diagram-roadmap" and payload_candidate.parent.name == "extensions" and payload_candidate.parent.parent.name == ".specify":
+        return payload_candidate.parents[2].resolve(strict=True), payload_candidate.resolve(strict=True)
+    return payload_candidate.resolve(strict=True), payload_candidate.resolve(strict=True)
+
+
 def _require_contained(candidate: Path, root: Path, label: str) -> Path:
     """Resolve a path and require it to remain at or below the supplied root."""
     try:
@@ -161,6 +179,11 @@ def _require_contained(candidate: Path, root: Path, label: str) -> Path:
     except (OSError, RuntimeError, ValueError) as error:
         raise ContractError(f"{label} resolves outside the active project") from error
     return resolved
+
+
+def require_contained(candidate: Path, root: Path, label: str) -> Path:
+    """Expose the loader's canonical containment boundary to sibling scripts."""
+    return _require_contained(candidate, root, label)
 
 
 def _read_fixed_yaml(path: Path, root: Path, label: str, *, required: bool) -> str | None:
@@ -403,6 +426,11 @@ def _validate_concrete_path(project_root: Path, kind: str, value: str) -> dict[s
     return {"path": relative}
 
 
+def validate_concrete_path(project_root: Path, kind: str, value: str) -> dict[str, str]:
+    """Validate a concrete project path immediately before access."""
+    return _validate_concrete_path(project_root, kind, value)
+
+
 def _resolve_configuration(project_root: Path, payload_root: Path, yaml: Any) -> dict[str, Any]:
     """Resolve the six-field configuration contract from all precedence sources."""
     configuration_path = (
@@ -469,6 +497,11 @@ def _resolve_configuration(project_root: Path, payload_root: Path, yaml: Any) ->
         "prd_globs": patterns,
         "max_findings": maximum,
     }
+
+
+def resolve_configuration(project_root: Path, payload_root: Path, yaml: Any) -> dict[str, Any]:
+    """Resolve the stable six-field configuration contract for a sibling script."""
+    return _resolve_configuration(project_root, payload_root, yaml)
 
 
 def _run(yaml: Any) -> dict[str, Any]:

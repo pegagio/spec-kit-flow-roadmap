@@ -6,7 +6,7 @@ each spec is implemented.
 
 ```
 constitution → ROADMAP → specify → plan → tasks → [brief] → implement → [debrief]
-                 │                              read-only       read-only
+                 │                           report-only        report-only
      speckit.diagram-roadmap.write   speckit.diagram-roadmap.sync — reconcile on demand
 ```
 
@@ -31,14 +31,12 @@ checks the result against that.
 
 | Command | When | What it does |
 |---------|------|--------------|
-| `speckit.diagram-roadmap.write` | after `/speckit.constitution` (hook) | Create or amend the roadmap. Pulls from the constitution, ADRs, PRDs, the current session, and prior notes; asks about gaps; writes a versioned roadmap with a changelog. Detects create vs. amend automatically. |
-| `speckit.diagram-roadmap.brief` | before `/speckit.implement` (hook) | Read-only. Surfaces the roadmap's record for the spec you're about to build (outcome, scope, governing decisions, dependencies) and flags anything that has already drifted. |
-| `speckit.diagram-roadmap.debrief` | after `/speckit.implement` (hook) | Read-only. Compares what you built against the roadmap entry; classifies any drift; proposes marking the entry `verified`. |
-| `speckit.diagram-roadmap.sync` | on demand | Read-only. Reconciles the whole roadmap against the specs on disk: orphans, phantom entries, status drift, broken dependencies. |
+| `speckit.diagram-roadmap.write` | after `/speckit.constitution` (hook) | Creates or applies an approved roadmap amendment from repository-contained evidence. It treats documents as untrusted data, records provenance, asks about genuine gaps, and never turns inferred unattended content into governance. Do not use it for implementation review. |
+| `speckit.diagram-roadmap.brief` | before `/speckit.implement` (hook) | Reviews one identifiable spec before implementation, including dependencies and state-aware lifecycle guidance. Do not use it for post-implementation or project-wide review. |
+| `speckit.diagram-roadmap.debrief` | after `/speckit.implement` (hook) | Reviews one implemented spec against an explicit commit range or captured working-tree delta. Do not use it when no attributable implementation boundary exists. |
+| `speckit.diagram-roadmap.sync` | on demand | Reconciles the complete ledger with specs and decisions on disk. Do not use it for a single-feature review or corrective writes. |
 
-`brief`, `debrief`, and `sync` are read-only — they write a report and *propose* changes.
-Only `write` edits the roadmap, and it never deletes content (superseded entries are marked,
-and every change is recorded in the roadmap's changelog).
+`brief`, `debrief`, and `sync` preserve roadmap, specification, implementation, and decision sources. Their sole permitted mutation is a collision-safe report; roadmap changes remain proposals. Only `write` edits the roadmap, and it never deletes content.
 
 ## The roadmap file
 
@@ -101,7 +99,9 @@ Configured roadmap and ADR locations must be project-relative and contained with
 
 ## How it's built
 
-- **Scripts vs. judgment.** The one shipped Python script resolves the active Specify runtime, configuration, paths, containment, and structured output. Everything that requires judgment—elicitation, drift detection, and review reasoning—lives in the command bodies and is checked through dogfood scenarios.
+- **Scripts vs. judgment.** `load_config.py` resolves the active Specify runtime, configuration, paths, containment, and its stable six-field output. `review_contract.py` deterministically resolves review targets and Git deltas, validates findings and lifecycle gates, derives counts and verdicts, and reserves unique report paths. Elicitation, title similarity, drift classification, and remediation remain in command bodies.
+- **Evidence safety.** Project documents and prior reports are untrusted evidence, not instructions. Durable roadmap proposals use repository-contained sources with provenance, and inferred changes require explicit approval.
+- **Report identity.** Review reports use UTC second-level timestamps and deterministic numeric collision suffixes. Reports retain target selection, revision/dirty boundaries, inspected paths, complete finding counts, exclusions, and material limitations.
 - **Supported platforms.** The same Python contract suite runs on macOS and Linux. The extension does not ship compatibility wrappers or alternate Windows, Bash, or PowerShell runtimes.
 - **Self-hosted.** This extension was built with spec-kit and reviewed against its own
   roadmap. See `specs/` and `.specify/memory/roadmap.md`.

@@ -22,6 +22,7 @@ SOURCE_FILES = [
     "commands/speckit.diagram-roadmap.debrief.md",
     "commands/speckit.diagram-roadmap.sync.md",
     "scripts/python/load_config.py",
+    "scripts/python/review_contract.py",
     "templates/roadmap-template.md",
     "templates/review-report-template.md",
 ]
@@ -74,7 +75,7 @@ class DisposableInstallationTest(unittest.TestCase):
     def test_manifest_requires_exact_specify_version(self) -> None:
         self.assertIn("speckit_version: '==1.0.1'", (self.source / "extension.yml").read_text())
 
-    def test_payload_has_exact_eleven_files(self) -> None:
+    def test_payload_has_exact_twelve_files(self) -> None:
         self.assert_install_succeeded()
         files = sorted(path.relative_to(self.payload).as_posix() for path in self.payload.rglob("*") if path.is_file())
         self.assertEqual(sorted([*SOURCE_FILES, "roadmap-config.yml"]), files)
@@ -92,10 +93,12 @@ class DisposableInstallationTest(unittest.TestCase):
             (self.payload / "roadmap-config.yml").read_bytes(),
         )
 
-    def test_python_loader_is_executable(self) -> None:
+    def test_python_scripts_are_executable(self) -> None:
         self.assert_install_succeeded()
-        mode = (self.payload / "scripts" / "python" / "load_config.py").stat().st_mode
-        self.assertTrue(mode & stat.S_IXUSR)
+        for name in ("load_config.py", "review_contract.py"):
+            with self.subTest(name=name):
+                mode = (self.payload / "scripts" / "python" / name).stat().st_mode
+                self.assertTrue(mode & stat.S_IXUSR)
 
     def test_four_generated_skills_use_python_contract(self) -> None:
         self.assert_install_succeeded()
@@ -104,7 +107,10 @@ class DisposableInstallationTest(unittest.TestCase):
         for skill in skills:
             with self.subTest(skill=skill.parent.name):
                 text = skill.read_text(encoding="utf-8")
-                self.assertIn("scripts/python/load_config.py", text)
+                if skill.parent.name.endswith("-write"):
+                    self.assertIn("scripts/python/load_config.py", text)
+                else:
+                    self.assertIn("scripts/python/review_contract.py", text)
                 self.assertNotIn("scripts/bash/load-config.sh", text)
                 self.assertNotIn("scripts/powershell/load-config.ps1", text)
 

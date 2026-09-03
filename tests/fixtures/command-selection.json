@@ -1,0 +1,10 @@
+[
+  {"prompt":"Create the project roadmap from the constitution decisions.","expected":"write"},
+  {"prompt":"Plan the implementation tasks for this feature.","excluded":"write"},
+  {"prompt":"Brief this specification before implementation.","expected":"brief"},
+  {"prompt":"Reconcile every roadmap entry with specs on disk.","excluded":"brief"},
+  {"prompt":"Debrief the implemented feature from baseline to target.","expected":"debrief"},
+  {"prompt":"Review this specification before any implementation exists.","excluded":"debrief"},
+  {"prompt":"Synchronize the whole roadmap ledger with specifications.","expected":"sync"},
+  {"prompt":"Review only this implemented specification.","excluded":"sync"}
+]

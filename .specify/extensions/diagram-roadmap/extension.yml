@@ -17,24 +17,24 @@ provides:
   commands:
     - name: speckit.diagram-roadmap.write
       file: commands/speckit.diagram-roadmap.write.md
-      description: Create or amend the project spec roadmap (runs after the constitution)
+      description: Create or apply an approved roadmap amendment after constitution work; not for implementation review
     - name: speckit.diagram-roadmap.brief
       file: commands/speckit.diagram-roadmap.brief.md
-      description: >-
-        Read-only briefing: surface what the roadmap expects for the spec about
-        to be implemented
+      description: Review one identifiable spec immediately before implementation; not for post-implementation or project-wide review
     - name: speckit.diagram-roadmap.debrief
       file: commands/speckit.diagram-roadmap.debrief.md
-      description: 'Read-only review: check the implemented spec against its roadmap entry'
+      description: Review an implemented spec against an attributable delta; not for planning-only review
     - name: speckit.diagram-roadmap.sync
       file: commands/speckit.diagram-roadmap.sync.md
-      description: >-
-        Read-only reconciliation: detect drift between the roadmap ledger and
-        specs on disk
+      description: Reconcile the complete roadmap and specs; not for a single-feature review or corrective writes
   scripts:
     - name: load-config-python
       file: scripts/python/load_config.py
       description: Load and validate roadmap extension configuration; emit a JSON contract
+      executable: true
+    - name: review-contract-python
+      file: scripts/python/review_contract.py
+      description: Resolve deterministic review targets, deltas, findings, lifecycle gates, and report paths
       executable: true
   config:
     - name: roadmap-config.yml
