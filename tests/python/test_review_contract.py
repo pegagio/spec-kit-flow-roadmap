@@ -1,4 +1,4 @@
-"""Contract tests for deterministic Diagram Roadmap review mechanics."""
+"""Contract tests for deterministic FlowKit Roadmap review mechanics."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Smoke tests for the Diagram Roadmap Python loader."""
+"""Smoke tests for the FlowKit Roadmap Python loader."""
 
 from __future__ import annotations
 

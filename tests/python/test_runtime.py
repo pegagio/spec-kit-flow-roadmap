@@ -1,4 +1,4 @@
-"""Runtime-boundary tests for the Diagram Roadmap Python loader."""
+"""Runtime-boundary tests for the FlowKit Roadmap Python loader."""
 
 from __future__ import annotations
 
@@ -95,7 +95,7 @@ class RuntimeBoundaryTest(LoaderTestCase):
 
     def test_reexecution_loop_marker_fails_closed(self) -> None:
         layout = self.layout()
-        result = layout.run(environment={"SPECKIT_DIAGRAM_ROADMAP_ISOLATED": "1"})
+        result = layout.run(environment={"SPECKIT_FLOW_ROADMAP_ISOLATED": "1"})
         self.assert_failure(result)
         self.assertIn("did not converge", result.stderr)
 

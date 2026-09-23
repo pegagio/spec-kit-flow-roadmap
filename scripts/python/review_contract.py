@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Provide deterministic mechanics shared by Diagram Roadmap review commands."""
+"""Provide deterministic mechanics shared by FlowKit Roadmap review commands."""
 
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ def _load_sibling() -> ModuleType:
     """Load the reviewed sibling loader without ambient import-path dependence."""
     sys.dont_write_bytecode = True
     path = Path(__file__).resolve().with_name("load_config.py")
-    specification = importlib.util.spec_from_file_location("diagram_roadmap_load_config", path)
+    specification = importlib.util.spec_from_file_location("flow_roadmap_load_config", path)
     if specification is None or specification.loader is None:
         raise RuntimeError("sibling loader could not be loaded")
     module = importlib.util.module_from_spec(specification)

@@ -1,4 +1,4 @@
-"""Configuration precedence tests for the Diagram Roadmap Python loader."""
+"""Configuration precedence tests for the FlowKit Roadmap Python loader."""
 
 from __future__ import annotations
 
@@ -22,15 +22,23 @@ class ConfigurationResolutionTest(LoaderTestCase):
         layout = self.layout(installed=True)
         layout.write_config("roadmap:\n  path: file-roadmap.md\nadr:\n  dir: file-adrs\nprd:\n  globs: [file-prd.md]\nreport:\n  max_findings: 3\n")
         output = self.assert_success(layout.run(environment={
-            "SPECKIT_DIAGRAM_ROADMAP_PATH": "environment-roadmap.md",
-            "SPECKIT_DIAGRAM_ROADMAP_ADR_DIR": "environment-adrs",
-            "SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS": "environment-one.md,environment-two.md",
-            "SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS": "9",
+            "SPECKIT_FLOW_ROADMAP_PATH": "environment-roadmap.md",
+            "SPECKIT_FLOW_ROADMAP_ADR_DIR": "environment-adrs",
+            "SPECKIT_FLOW_ROADMAP_PRD_GLOBS": "environment-one.md,environment-two.md",
+            "SPECKIT_FLOW_ROADMAP_MAX_FINDINGS": "9",
         }))
         self.assertEqual("environment-roadmap.md", output["roadmap_path"])
         self.assertEqual("environment-adrs", output["adr_dir"])
         self.assertEqual(["environment-one.md", "environment-two.md"], output["prd_globs"])
         self.assertEqual(9, output["max_findings"])
+
+    def test_old_environment_override_is_ignored(self) -> None:
+        layout = self.layout(installed=True)
+        layout.write_config("roadmap:\n  path: configured-roadmap.md\n")
+        output = self.assert_success(
+            layout.run(environment={"SPECKIT_DIAGRAM_ROADMAP_PATH": "obsolete-roadmap.md"})
+        )
+        self.assertEqual("configured-roadmap.md", output["roadmap_path"])
 
     def test_configuration_leaves_override_manifest_independently(self) -> None:
         layout = self.layout(installed=True)
@@ -54,24 +62,24 @@ class ConfigurationResolutionTest(LoaderTestCase):
         self.assertEqual([], self.assert_success(layout.run())["prd_globs"])
 
     def test_csv_quotes_preserve_comma(self) -> None:
-        output = self.assert_success(self.layout().run(environment={"SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS": '"docs/a,b.md",docs/c.md'}))
+        output = self.assert_success(self.layout().run(environment={"SPECKIT_FLOW_ROADMAP_PRD_GLOBS": '"docs/a,b.md",docs/c.md'}))
         self.assertEqual(["docs/a,b.md", "docs/c.md"], output["prd_globs"])
 
     def test_empty_csv_member_is_rejected(self) -> None:
-        self.assert_failure(self.layout().run(environment={"SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS": "one.md,,two.md"}))
+        self.assert_failure(self.layout().run(environment={"SPECKIT_FLOW_ROADMAP_PRD_GLOBS": "one.md,,two.md"}))
 
     def test_multiple_csv_records_are_rejected(self) -> None:
-        self.assert_failure(self.layout().run(environment={"SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS": "one.md\ntwo.md"}))
+        self.assert_failure(self.layout().run(environment={"SPECKIT_FLOW_ROADMAP_PRD_GLOBS": "one.md\ntwo.md"}))
 
     def test_zero_findings_is_valid(self) -> None:
-        output = self.assert_success(self.layout().run(environment={"SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS": "0"}))
+        output = self.assert_success(self.layout().run(environment={"SPECKIT_FLOW_ROADMAP_MAX_FINDINGS": "0"}))
         self.assertEqual(0, output["max_findings"])
 
     def test_glob_resolution_does_not_scan(self) -> None:
         layout = self.layout()
         (layout.root / "docs").mkdir()
         (layout.root / "docs" / "prd-secret.md").write_text("secret", encoding="utf-8")
-        output = self.assert_success(layout.run(environment={"SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS": "docs/prd*.md"}))
+        output = self.assert_success(layout.run(environment={"SPECKIT_FLOW_ROADMAP_PRD_GLOBS": "docs/prd*.md"}))
         self.assertEqual(["docs/prd*.md"], output["prd_globs"])
         self.assertNotIn("prd-secret.md", str(output))
 

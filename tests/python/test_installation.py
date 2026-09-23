@@ -17,10 +17,10 @@ SOURCE_FILES = [
     "extension.yml",
     "LICENSE",
     "config-template.yml",
-    "commands/speckit.diagram-roadmap.write.md",
-    "commands/speckit.diagram-roadmap.brief.md",
-    "commands/speckit.diagram-roadmap.debrief.md",
-    "commands/speckit.diagram-roadmap.sync.md",
+    "commands/speckit.flow-roadmap.write.md",
+    "commands/speckit.flow-roadmap.brief.md",
+    "commands/speckit.flow-roadmap.debrief.md",
+    "commands/speckit.flow-roadmap.sync.md",
     "scripts/python/load_config.py",
     "scripts/python/review_contract.py",
     "templates/roadmap-template.md",
@@ -56,13 +56,13 @@ class DisposableInstallationTest(unittest.TestCase):
             check=False,
         )
         cls.enable = subprocess.run(
-            ["specify", "extension", "enable", "diagram-roadmap"],
+            ["specify", "extension", "enable", "flow-roadmap"],
             cwd=cls.project,
             text=True,
             capture_output=True,
             check=False,
         )
-        cls.payload = specify_directory / "extensions" / "diagram-roadmap"
+        cls.payload = specify_directory / "extensions" / "flow-roadmap"
 
     @classmethod
     def tearDownClass(cls) -> None:
@@ -102,7 +102,7 @@ class DisposableInstallationTest(unittest.TestCase):
 
     def test_four_generated_skills_use_python_contract(self) -> None:
         self.assert_install_succeeded()
-        skills = sorted((self.project / ".agents" / "skills").glob("speckit-diagram-roadmap-*/SKILL.md"))
+        skills = sorted((self.project / ".agents" / "skills").glob("speckit-flow-roadmap-*/SKILL.md"))
         self.assertEqual(4, len(skills))
         for skill in skills:
             with self.subTest(skill=skill.parent.name):
@@ -113,6 +113,16 @@ class DisposableInstallationTest(unittest.TestCase):
                     self.assertIn("scripts/python/review_contract.py", text)
                 self.assertNotIn("scripts/bash/load-config.sh", text)
                 self.assertNotIn("scripts/powershell/load-config.ps1", text)
+
+    def test_old_command_and_skill_names_are_not_registered(self) -> None:
+        self.assert_install_succeeded()
+        registry = (self.project / ".specify" / "extensions.yml").read_text(encoding="utf-8")
+        for purpose in ("write", "brief", "debrief", "sync"):
+            with self.subTest(purpose=purpose):
+                self.assertNotIn(f"speckit.diagram-roadmap.{purpose}", registry)
+                self.assertFalse(
+                    (self.project / ".agents" / "skills" / f"speckit-diagram-roadmap-{purpose}").exists()
+                )
 
     def test_three_hooks_are_registered(self) -> None:
         self.assert_install_succeeded()

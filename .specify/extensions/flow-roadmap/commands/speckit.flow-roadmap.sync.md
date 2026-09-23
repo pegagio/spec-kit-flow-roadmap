@@ -1,7 +1,7 @@
 ---
 description: Reconcile the complete roadmap ledger against specifications and decisions on disk; do not use for a single-feature review or to apply corrective edits.
 scripts:
-  py: .specify/extensions/diagram-roadmap/scripts/python/review_contract.py
+  py: .specify/extensions/flow-roadmap/scripts/python/review_contract.py
 ---
 
 ## User Input
@@ -28,7 +28,7 @@ Do not modify roadmap, specifications, ADRs, implementation, or history. The sol
 4. Judge reconciliation findings using only `status-lagging`, `orphan-spec`, `phantom-entry`, `dependency-contradiction`, `superseded-ADR`, and `abandoned-but-active`.
 5. Assign structured severity, category, text, suggestion, evidence, and blocking state. Missing or abandoned dependencies block; unresolved evidence is a limitation unless it establishes a canonical category. Send all findings to `{SCRIPT} evaluate-findings --kind sync --max-findings <configured-value>` and use its stable IDs, totals, overflow, and verdict.
 6. Reserve the report with `{SCRIPT} allocate-report --kind sync`, fill the shared template, and write only the reserved path.
-7. Report the verdict and path. Propose corrections through `speckit.diagram-roadmap.write`; never apply them.
+7. Report the verdict and path. Propose corrections through `speckit.flow-roadmap.write`; never apply them.
 
 ## Required Report Provenance
 

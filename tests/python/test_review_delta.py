@@ -1,4 +1,4 @@
-"""Git delta tests for the Diagram Roadmap review helper."""
+"""Git delta tests for the FlowKit Roadmap review helper."""
 
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ class ReviewDeltaTest(unittest.TestCase):
         scripts.mkdir(parents=True)
         shutil.copy2(SOURCE_LOADER, scripts / "load_config.py")
         shutil.copy2(SOURCE_REVIEW_CONTRACT, scripts / "review_contract.py")
-        (self.root / "extension.yml").write_text("schema_version: '1.0'\nextension:\n  id: diagram-roadmap\ndefaults:\n  report:\n    max_findings: 50\n", encoding="utf-8")
+        (self.root / "extension.yml").write_text("schema_version: '1.0'\nextension:\n  id: flow-roadmap\ndefaults:\n  report:\n    max_findings: 50\n", encoding="utf-8")
         self.write("tracked.txt", "one\n")
         self.commit("initial")
         self.baseline = self.git("rev-parse", "HEAD").stdout.strip()

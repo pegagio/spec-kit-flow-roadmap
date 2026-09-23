@@ -1,4 +1,4 @@
-"""Strict YAML and trusted-input tests for the Diagram Roadmap Python loader."""
+"""Strict YAML and trusted-input tests for the FlowKit Roadmap Python loader."""
 
 from __future__ import annotations
 

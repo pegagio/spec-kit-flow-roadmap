@@ -1,7 +1,7 @@
 ---
 description: Review an implemented specification against its roadmap entry using an attributable implementation delta; do not use for planning-only review or verification without a trustworthy boundary.
 scripts:
-  py: .specify/extensions/diagram-roadmap/scripts/python/review_contract.py
+  py: .specify/extensions/flow-roadmap/scripts/python/review_contract.py
 ---
 
 ## User Input

@@ -9,6 +9,7 @@ maintained explicitly.
 
 ### Changed
 
+- Renamed the project and extension display name to FlowKit Roadmap, the project identifier to `spec-kit-flow-roadmap`, the extension ID to `flow-roadmap`, and the command and generated-skill namespaces to `speckit.flow-roadmap.*` and `speckit-flow-roadmap-*`.
 - Renamed the project to Diagram Roadmap, the extension ID to `diagram-roadmap`, and the command namespace to `speckit.diagram-roadmap.*`.
 - Updated the intended repository name to `spec-kit-diagram-roadmap` and aligned installed paths, documentation, and tests with the new extension ID.
 - Replaced the maintained Bash and PowerShell loaders with one Python 3.11.16 implementation, narrowed supported platforms to macOS and Linux, and made Windows support an explicit non-goal.

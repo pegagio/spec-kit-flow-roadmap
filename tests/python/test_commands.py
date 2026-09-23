@@ -1,4 +1,4 @@
-"""Contract tests for Diagram Roadmap command definitions."""
+"""Contract tests for FlowKit Roadmap command definitions."""
 
 from __future__ import annotations
 
@@ -10,10 +10,10 @@ from support import REPOSITORY_ROOT
 
 
 COMMANDS = {
-    "write": REPOSITORY_ROOT / "commands" / "speckit.diagram-roadmap.write.md",
-    "brief": REPOSITORY_ROOT / "commands" / "speckit.diagram-roadmap.brief.md",
-    "debrief": REPOSITORY_ROOT / "commands" / "speckit.diagram-roadmap.debrief.md",
-    "sync": REPOSITORY_ROOT / "commands" / "speckit.diagram-roadmap.sync.md",
+    "write": REPOSITORY_ROOT / "commands" / "speckit.flow-roadmap.write.md",
+    "brief": REPOSITORY_ROOT / "commands" / "speckit.flow-roadmap.brief.md",
+    "debrief": REPOSITORY_ROOT / "commands" / "speckit.flow-roadmap.debrief.md",
+    "sync": REPOSITORY_ROOT / "commands" / "speckit.flow-roadmap.sync.md",
 }
 
 
@@ -28,7 +28,7 @@ class CommandContractTest(unittest.TestCase):
                 expected = "load_config.py" if name == "write" else "review_contract.py"
                 self.assertEqual(
                     1,
-                    frontmatter.count(f"py: .specify/extensions/diagram-roadmap/scripts/python/{expected}"),
+                    frontmatter.count(f"py: .specify/extensions/flow-roadmap/scripts/python/{expected}"),
                 )
                 self.assertNotRegex(frontmatter, r"(?m)^\s+(?:sh|ps):")
 

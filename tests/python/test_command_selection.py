@@ -21,7 +21,7 @@ class CommandSelectionTest(unittest.TestCase):
     def test_descriptions_front_load_use_and_non_goal(self) -> None:
         for command in ("write", "brief", "debrief", "sync"):
             with self.subTest(command=command):
-                path = REPOSITORY_ROOT / "commands" / f"speckit.diagram-roadmap.{command}.md"
+                path = REPOSITORY_ROOT / "commands" / f"speckit.flow-roadmap.{command}.md"
                 description = path.read_text(encoding="utf-8").splitlines()[1]
                 self.assertIn("description:", description)
                 self.assertRegex(description, r"(?i)(do not|not for)")

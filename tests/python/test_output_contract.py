@@ -1,4 +1,4 @@
-"""Output and diagnostic contract tests for the Diagram Roadmap Python loader."""
+"""Output and diagnostic contract tests for the FlowKit Roadmap Python loader."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ class OutputContractTest(LoaderTestCase):
     def test_unicode_quotes_backslashes_tabs_and_lines_round_trip(self) -> None:
         layout = self.layout()
         value = 'docs/雪/"quoted"\\tab\tline\nroadmap.md'
-        result = layout.run(environment={"SPECKIT_DIAGRAM_ROADMAP_PATH": value})
+        result = layout.run(environment={"SPECKIT_FLOW_ROADMAP_PATH": value})
         output = self.assert_success(result)
         self.assertEqual(value, output["roadmap_path"])
         self.assertIn("\\t", result.stdout)

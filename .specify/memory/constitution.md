@@ -1,6 +1,32 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 2.0.1 → 2.0.2
+Bump rationale: PATCH — updates current project and extension identity wording
+  without changing a principle or technology constraint.
+
+Modified principles: none.
+
+Modified sections:
+  - Current project note and opening description
+
+Added sections: none.
+Removed sections: none.
+
+Templates requiring review:
+  ✅ .specify/memory/constitution.md (current identity wording only)
+  ✅ Dependent templates and commands; no changes required
+
+Deferred / TODO: none.
+
+Project note: this repository BUILDS FlowKit Roadmap, the separately installable
+Spec Kit extension in the spec-kit-flow product group. Its project identifier is
+`spec-kit-flow-roadmap`; its extension ID is `flow-roadmap`.
+-->
+
+<!--
+SYNC IMPACT REPORT
+==================
 Version change: 2.0.0 → 2.0.1
 Bump rationale: PATCH — removes obsolete references to retired scripting
   implementations while preserving the Python-only platform contract.
@@ -29,9 +55,9 @@ Project note: this repository BUILDS the Diagram Roadmap spec-kit extension (`di
 The principles below govern how that extension is designed, built, and packaged.
 -->
 
-# Diagram Roadmap Constitution
+# FlowKit Roadmap Constitution
 
-Diagram Roadmap is a GitHub spec-kit extension. It inserts a **roadmap** step
+FlowKit Roadmap is a GitHub spec-kit extension. It inserts a **roadmap** step
 immediately after `/speckit.constitution` — capturing the spec-specific topics,
 technology choices, outcomes, constraints, milestones, and scope discussed during
 the constitution and grilling phases so they are not lost — and adds a
@@ -159,4 +185,4 @@ This constitution supersedes other practices where they conflict.
 - **Precedence.** Where Technology Constraints and a Core Principle conflict, the
   principle wins.
 
-**Version**: 2.0.1 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-09-01
+**Version**: 2.0.2 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-09-23

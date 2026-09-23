@@ -1,4 +1,4 @@
-"""Assertions for the repository's installed Diagram Roadmap snapshot."""
+"""Assertions for the repository's installed FlowKit Roadmap snapshot."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ class DogfoodInstallationTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.payload = REPOSITORY_ROOT / ".specify" / "extensions" / "diagram-roadmap"
+        cls.payload = REPOSITORY_ROOT / ".specify" / "extensions" / "flow-roadmap"
 
     def test_exact_installed_file_set(self) -> None:
         files = sorted(path.relative_to(self.payload).as_posix() for path in self.payload.rglob("*") if path.is_file())
@@ -43,7 +43,7 @@ class DogfoodInstallationTest(unittest.TestCase):
         self.assertEqual(6, len(json.loads(result.stdout)))
 
     def test_generated_skills_and_hooks_are_current(self) -> None:
-        skills = sorted((REPOSITORY_ROOT / ".agents" / "skills").glob("speckit-diagram-roadmap-*/SKILL.md"))
+        skills = sorted((REPOSITORY_ROOT / ".agents" / "skills").glob("speckit-flow-roadmap-*/SKILL.md"))
         self.assertEqual(4, len(skills))
         for skill in skills:
             with self.subTest(skill=skill.parent.name):
@@ -53,9 +53,27 @@ class DogfoodInstallationTest(unittest.TestCase):
                 else:
                     self.assertIn("scripts/python/review_contract.py", text)
         registry = (REPOSITORY_ROOT / ".specify" / "extensions.yml").read_text(encoding="utf-8")
+        self.assertNotIn("diagram-roadmap", registry)
+        self.assertNotIn("speckit.diagram-roadmap.", registry)
         self.assertEqual(1, registry.count("after_constitution:"))
         self.assertEqual(1, registry.count("before_implement:"))
         self.assertEqual(1, registry.count("after_implement:"))
+
+    def test_only_flow_roadmap_is_in_the_installed_registry(self) -> None:
+        registry = json.loads(
+            (REPOSITORY_ROOT / ".specify" / "extensions" / ".registry").read_text(encoding="utf-8")
+        )
+        extensions = registry["extensions"]
+        self.assertEqual({"flow-roadmap"}, set(extensions))
+        self.assertEqual(
+            [
+                "speckit.flow-roadmap.write",
+                "speckit.flow-roadmap.brief",
+                "speckit.flow-roadmap.debrief",
+                "speckit.flow-roadmap.sync",
+            ],
+            extensions["flow-roadmap"]["registered_commands"]["codex"],
+        )
 
     def test_payload_has_no_symlinks_or_nested_git(self) -> None:
         self.assertFalse(any(path.is_symlink() for path in self.payload.rglob("*")))

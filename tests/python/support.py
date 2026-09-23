@@ -1,4 +1,4 @@
-"""Shared test support for the Diagram Roadmap Python loader."""
+"""Shared test support for the FlowKit Roadmap Python loader."""
 
 from __future__ import annotations
 
@@ -19,8 +19,8 @@ SOURCE_REVIEW_CONTRACT = REPOSITORY_ROOT / "scripts" / "python" / "review_contra
 DEFAULT_MANIFEST = """\
 schema_version: '1.0'
 extension:
-  id: diagram-roadmap
-  name: Diagram Roadmap
+  id: flow-roadmap
+  name: FlowKit Roadmap
   version: 0.2.0
 requires:
   speckit_version: '==1.0.1'
@@ -51,7 +51,7 @@ class LoaderLayout:
         self.root = Path(self._temporary_directory.name) / "project"
         self.root.mkdir()
         self.payload = (
-            self.root / ".specify" / "extensions" / "diagram-roadmap"
+            self.root / ".specify" / "extensions" / "flow-roadmap"
             if installed
             else self.root
         )
@@ -68,7 +68,7 @@ class LoaderLayout:
             self.root
             / ".specify"
             / "extensions"
-            / "diagram-roadmap"
+            / "flow-roadmap"
             / "roadmap-config.yml"
         )
         self.configuration.parent.mkdir(parents=True, exist_ok=True)
@@ -101,7 +101,7 @@ class LoaderLayout:
         command_interpreter = str(interpreter or sys.executable)
         child_environment = os.environ.copy()
         for name in tuple(child_environment):
-            if name.startswith("SPECKIT_DIAGRAM_ROADMAP_") or name == "PYTHONPATH":
+            if name.startswith(("SPECKIT_DIAGRAM_ROADMAP_", "SPECKIT_FLOW_ROADMAP_")) or name == "PYTHONPATH":
                 child_environment.pop(name)
         child_environment.update(
             {
@@ -130,7 +130,7 @@ class LoaderLayout:
         """Run the review helper with the same isolated process environment."""
         child_environment = os.environ.copy()
         for name in tuple(child_environment):
-            if name.startswith("SPECKIT_DIAGRAM_ROADMAP_") or name == "PYTHONPATH":
+            if name.startswith(("SPECKIT_DIAGRAM_ROADMAP_", "SPECKIT_FLOW_ROADMAP_")) or name == "PYTHONPATH":
                 child_environment.pop(name)
         child_environment.update({"PATH": f"{self.bin_directory}{os.pathsep}{os.environ.get('PATH', '')}", "HOME": os.environ.get("HOME", str(self.root)), "LANG": "C.UTF-8"})
         if environment:

@@ -1,4 +1,4 @@
-"""Project-containment tests for the Diagram Roadmap Python loader."""
+"""Project-containment tests for the FlowKit Roadmap Python loader."""
 
 from __future__ import annotations
 

@@ -5,10 +5,10 @@
 !config-template.yml
 !commands/**
 commands/*
-!commands/speckit.diagram-roadmap.write.md
-!commands/speckit.diagram-roadmap.brief.md
-!commands/speckit.diagram-roadmap.debrief.md
-!commands/speckit.diagram-roadmap.sync.md
+!commands/speckit.flow-roadmap.write.md
+!commands/speckit.flow-roadmap.brief.md
+!commands/speckit.flow-roadmap.debrief.md
+!commands/speckit.flow-roadmap.sync.md
 !templates/**
 templates/*
 !templates/roadmap-template.md

@@ -1,6 +1,6 @@
 # Project Origins
 
-Diagram Roadmap is an independent derivative of [spec-kit-roadmap](https://github.com/srobroek/speckit-roadmap).
+FlowKit Roadmap is an independent derivative of [spec-kit-roadmap](https://github.com/srobroek/speckit-roadmap).
 
 The project was created from the spec-kit-roadmap repository at:
 
@@ -9,7 +9,7 @@ The project was created from the spec-kit-roadmap repository at:
 
 The original Git history has been preserved so that authorship and development history of the inherited work remain intact.
 
-Diagram Roadmap is independently maintained and is not intended to remain compatible with spec-kit-roadmap.
+FlowKit Roadmap is independently maintained and is not intended to remain compatible with spec-kit-roadmap.
 
 Future changes to spec-kit-roadmap may be reviewed for ideas, fixes, or other relevant developments, but upstream changes are not expected to be merged directly into this project.
 

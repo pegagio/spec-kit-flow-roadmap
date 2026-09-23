@@ -1,11 +1,11 @@
 installed:
-- diagram-roadmap
+- flow-roadmap
 settings:
   auto_execute_hooks: true
 hooks:
   after_constitution:
-  - extension: diagram-roadmap
-    command: speckit.diagram-roadmap.write
+  - extension: flow-roadmap
+    command: speckit.flow-roadmap.write
     enabled: true
     optional: true
     priority: 10
@@ -15,8 +15,8 @@ hooks:
       intent are not lost
     condition: null
   before_implement:
-  - extension: diagram-roadmap
-    command: speckit.diagram-roadmap.brief
+  - extension: flow-roadmap
+    command: speckit.flow-roadmap.brief
     enabled: true
     optional: true
     priority: 10
@@ -25,8 +25,8 @@ hooks:
       dependencies) for the spec about to be built
     condition: null
   after_implement:
-  - extension: diagram-roadmap
-    command: speckit.diagram-roadmap.debrief
+  - extension: flow-roadmap
+    command: speckit.flow-roadmap.debrief
     enabled: true
     optional: true
     priority: 10

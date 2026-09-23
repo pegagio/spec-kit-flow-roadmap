@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Load and validate Diagram Roadmap configuration as a stable JSON contract."""
+"""Load and validate FlowKit Roadmap configuration as a stable JSON contract."""
 
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ from typing import Any
 REQUIRED_PYTHON = (3, 11, 16)
 REQUIRED_PYYAML = (6, 0)
 MAXIMUM_YAML_BYTES = 65_536
-REEXECUTION_MARKER = "SPECKIT_DIAGRAM_ROADMAP_ISOLATED"
+REEXECUTION_MARKER = "SPECKIT_FLOW_ROADMAP_ISOLATED"
 VALIDATION_KINDS = {"roadmap-read", "roadmap-write", "adr", "prd"}
 DEFAULT_ROADMAP_PATH = ".specify/memory/roadmap.md"
 DEFAULT_ADR_DIRECTORY = "docs/adr/"
@@ -141,7 +141,7 @@ def _discover_roots() -> tuple[Path, Path]:
         raise ContractError("loader script is outside a supported source or installed layout")
     payload_candidate = script.parents[2]
     if (
-        payload_candidate.name == "diagram-roadmap"
+        payload_candidate.name == "flow-roadmap"
         and payload_candidate.parent.name == "extensions"
         and payload_candidate.parent.parent.name == ".specify"
     ):
@@ -166,7 +166,7 @@ def discover_roots(script_path: Path | None = None) -> tuple[Path, Path]:
     if script.parent.name != "python" or script.parent.parent.name != "scripts":
         raise ContractError("script is outside a supported source or installed layout")
     payload_candidate = script.parents[2]
-    if payload_candidate.name == "diagram-roadmap" and payload_candidate.parent.name == "extensions" and payload_candidate.parent.parent.name == ".specify":
+    if payload_candidate.name == "flow-roadmap" and payload_candidate.parent.name == "extensions" and payload_candidate.parent.parent.name == ".specify":
         return payload_candidate.parents[2].resolve(strict=True), payload_candidate.resolve(strict=True)
     return payload_candidate.resolve(strict=True), payload_candidate.resolve(strict=True)
 
@@ -347,7 +347,7 @@ def _environment_integer(name: str) -> int | None:
 
 def _environment_globs() -> list[str] | None:
     """Parse the PRD environment override as exactly one strict CSV record."""
-    value = os.environ.get("SPECKIT_DIAGRAM_ROADMAP_PRD_GLOBS")
+    value = os.environ.get("SPECKIT_FLOW_ROADMAP_PRD_GLOBS")
     if value is None or value == "":
         return None
     try:
@@ -434,7 +434,7 @@ def validate_concrete_path(project_root: Path, kind: str, value: str) -> dict[st
 def _resolve_configuration(project_root: Path, payload_root: Path, yaml: Any) -> dict[str, Any]:
     """Resolve the six-field configuration contract from all precedence sources."""
     configuration_path = (
-        project_root / ".specify" / "extensions" / "diagram-roadmap" / "roadmap-config.yml"
+        project_root / ".specify" / "extensions" / "flow-roadmap" / "roadmap-config.yml"
     )
     manifest_path = payload_root / "extension.yml"
     configuration_text = _read_fixed_yaml(
@@ -455,13 +455,13 @@ def _resolve_configuration(project_root: Path, payload_root: Path, yaml: Any) ->
     )
     manifest = _manifest_defaults(_load_yaml(manifest_text, "extension manifest", yaml))
     roadmap_value = _first_value(
-        os.environ.get("SPECKIT_DIAGRAM_ROADMAP_PATH"),
+        os.environ.get("SPECKIT_FLOW_ROADMAP_PATH"),
         _leaf(configuration, "roadmap", "path"),
         _leaf(manifest, "roadmap", "path"),
         DEFAULT_ROADMAP_PATH,
     )
     adr_value = _first_value(
-        os.environ.get("SPECKIT_DIAGRAM_ROADMAP_ADR_DIR"),
+        os.environ.get("SPECKIT_FLOW_ROADMAP_ADR_DIR"),
         _leaf(configuration, "adr", "dir"),
         _leaf(manifest, "adr", "dir"),
         DEFAULT_ADR_DIRECTORY,
@@ -473,7 +473,7 @@ def _resolve_configuration(project_root: Path, payload_root: Path, yaml: Any) ->
         list(DEFAULT_PRD_GLOBS),
     )
     maximum = _first_value(
-        _environment_integer("SPECKIT_DIAGRAM_ROADMAP_MAX_FINDINGS"),
+        _environment_integer("SPECKIT_FLOW_ROADMAP_MAX_FINDINGS"),
         _leaf(configuration, "report", "max_findings"),
         _leaf(manifest, "report", "max_findings"),
         DEFAULT_MAX_FINDINGS,

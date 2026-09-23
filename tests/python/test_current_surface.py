@@ -23,7 +23,42 @@ def load_mise_config() -> dict[str, object]:
 
 
 class CurrentSurfaceTest(unittest.TestCase):
-    """Keep unsupported runtime references out of maintained current surfaces."""
+    """Keep current project identity and supported tooling coherent."""
+
+    def test_manifest_defines_the_flow_roadmap_identity(self) -> None:
+        manifest = read_root_text("extension.yml")
+        self.assertIn("id: flow-roadmap", manifest)
+        self.assertIn("name: FlowKit Roadmap", manifest)
+        self.assertIn("https://github.com/pegagio/spec-kit-flow-roadmap", manifest)
+        for purpose in ("write", "brief", "debrief", "sync"):
+            with self.subTest(purpose=purpose):
+                self.assertIn(f"name: speckit.flow-roadmap.{purpose}", manifest)
+                self.assertIn(f"commands/speckit.flow-roadmap.{purpose}.md", manifest)
+        self.assertNotIn("speckit.diagram-roadmap.", manifest)
+
+    def test_living_identity_documents_use_flow_roadmap_names(self) -> None:
+        readme = read_root_text("README.md")
+        constitution = read_root_text(".specify", "memory", "constitution.md")
+        roadmap = read_root_text(".specify", "memory", "roadmap.md")
+        origins = read_root_text("ORIGINS.md")
+
+        self.assertTrue(readme.startswith("# FlowKit Roadmap\n"))
+        self.assertTrue(origins.splitlines()[2].startswith("FlowKit Roadmap is an independent derivative"))
+        self.assertTrue(constitution.split("# FlowKit Roadmap Constitution", 1)[1].startswith("\n\nFlowKit Roadmap"))
+        self.assertIn("# FlowKit Roadmap — Spec Roadmap\n", roadmap)
+        self.assertIn("planned for **FlowKit Roadmap**", roadmap)
+        self.assertIn(".specify/extensions/flow-roadmap/", roadmap)
+        self.assertIn("flow-roadmap", roadmap.split("## Constraints & Decisions", 1)[0])
+
+    def test_current_readme_documents_all_new_commands_and_configuration(self) -> None:
+        readme = read_root_text("README.md")
+        for purpose in ("write", "brief", "debrief", "sync"):
+            with self.subTest(purpose=purpose):
+                self.assertIn(f"speckit.flow-roadmap.{purpose}", readme)
+                self.assertIn(f"speckit-flow-roadmap-{purpose}", readme)
+        self.assertIn("specify extension enable flow-roadmap", readme)
+        self.assertIn(".specify/extensions/flow-roadmap/roadmap-config.yml", readme)
+        self.assertIn("SPECKIT_FLOW_ROADMAP_*", readme)
 
     def test_mise_test_task_uses_the_declared_python_without_bootstrap(self) -> None:
         config = load_mise_config()
@@ -125,7 +160,7 @@ class CurrentSurfaceTest(unittest.TestCase):
         self.assertIn("bash + PowerShell", released)
 
     def test_generated_skills_have_no_legacy_runtime_paths(self) -> None:
-        skills = sorted((REPOSITORY_ROOT / ".agents" / "skills").glob("speckit-diagram-roadmap-*/SKILL.md"))
+        skills = sorted((REPOSITORY_ROOT / ".agents" / "skills").glob("speckit-flow-roadmap-*/SKILL.md"))
         self.assertEqual(4, len(skills))
         for skill in skills:
             with self.subTest(skill=skill.parent.name):

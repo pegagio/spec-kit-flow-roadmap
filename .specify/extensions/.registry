@@ -1,22 +1,22 @@
 {
   "schema_version": "1.0",
   "extensions": {
-    "diagram-roadmap": {
+    "flow-roadmap": {
       "version": "0.2.0",
       "source": "local",
-      "manifest_hash": "sha256:c0e58b38c325fa3b5ee8da6b54a0ae4afc546c9ea0f746fa2c53485702d09fc9",
+      "manifest_hash": "sha256:0194484f54f3a3d8184131cc24b9b94efb1827f5790dd7eabd4a52655ac7a18d",
       "enabled": true,
       "priority": 10,
       "registered_commands": {
         "codex": [
-          "speckit.diagram-roadmap.write",
-          "speckit.diagram-roadmap.brief",
-          "speckit.diagram-roadmap.debrief",
-          "speckit.diagram-roadmap.sync"
+          "speckit.flow-roadmap.write",
+          "speckit.flow-roadmap.brief",
+          "speckit.flow-roadmap.debrief",
+          "speckit.flow-roadmap.sync"
         ]
       },
       "registered_skills": [],
-      "installed_at": "2026-09-01T14:37:57.372121+00:00"
+      "installed_at": "2026-09-23T14:49:38.163036+00:00"
     }
   }
 }

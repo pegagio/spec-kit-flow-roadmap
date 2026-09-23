@@ -1,15 +1,24 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.3.1 → 2.3.2
-Bump rationale: PATCH — records intended-user acceptance, advances entry 011 to implemented, and explicitly defers Linux verification.
+Version change: 2.4.3 → 2.4.4
+Bump rationale: PATCH — records verification of existing entry 012 without changing its scope or outcome.
 
-Changes this revision (2.3.2, amended 2026-09-03):
-  - Changed entry 011 from specced to implemented after intended-user review accepted the command selection, evidence boundaries, debrief provenance, report semantics, and lifecycle guidance.
-  - Recorded Linux validation as deferred; entry 011 is not verified until that gate is completed or the governing Linux requirement is formally changed.
+Changes this revision (2.4.4, amended 2026-09-23):
+  - Advanced entry 012 from in-progress to verified after the completed specification, implementation debrief, and 114 passing tests.
 
-Specs affected: 011 advanced to implemented
+Specs affected: 012 verified
 Open questions added/resolved: none.
+
+--- Prior revision (2.4.3, amended 2026-09-23): PATCH — aligned the living roadmap title, vision, and source-of-truth note with the FlowKit Roadmap identity in entry 012. Specs affected: 012 current identity documentation; status remained in-progress. Open questions added/resolved: none.
+
+--- Prior revision (2.4.2, amended 2026-09-23): PATCH — refined entry 012's human-readable name to FlowKit Roadmap and recorded its product-group relationship. Specs affected: 012 display name refined; status remained in-progress. Open questions added/resolved: none.
+
+--- Prior revision (2.4.1, amended 2026-09-23): PATCH — advanced entry 012 to in-progress at the intended user's request before specification, confirmed its verified dependencies, resolved Q7 as documented manual migration, and recorded `specs/009-rename-flow-roadmap/`. Specs affected: 012 advanced to in-progress. Open questions added/resolved: Q7 resolved.
+
+--- Prior revision (2.4.0, amended 2026-09-23): MINOR — added planned entry 012 for the Spec Kit Flow Roadmap identity migration and Q7 for existing-installation migration. Specs affected: 012 added. Open questions added/resolved: Q7 added.
+
+--- Prior revision (2.3.2, amended 2026-09-03): PATCH — records intended-user acceptance, advances entry 011 to implemented, and explicitly defers Linux verification. Specs affected: 011 advanced to implemented. Open questions added/resolved: none.
 
 --- Prior revision (2.3.1, amended 2026-09-03): PATCH — records the new command-contract specification and advances entry 011 to specced. Specs affected: 011 advanced to specced. Open questions added/resolved: none.
 
@@ -65,9 +74,9 @@ Open questions added/resolved: none.
     Questions rather than fabricated.
 -->
 
-# Diagram Roadmap — Spec Roadmap
+# FlowKit Roadmap — Spec Roadmap
 
-Living, non-binding map of the specs planned for **Diagram Roadmap**. It is **not a
+Living, non-binding map of the specs planned for **FlowKit Roadmap**. It is **not a
 commitment to order or scope** — it captures the spec-specific discussion,
 decisions, technology choices, outcomes, and constraints surfaced during the
 constitution and grilling phases so they are not lost before the spec that needs
@@ -84,7 +93,7 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 
 <!-- Harvested from the constitution; the WHY of the project. -->
 
-- A spec-kit extension (`diagram-roadmap`) that **installs and registers cleanly**
+- A spec-kit extension (`flow-roadmap`) that **installs and registers cleanly**
   via `specify extension add` / `enable` and whose three lifecycle hooks
   (`after_constitution`, `before_implement`, `after_implement`) fire correctly in a
   real spec-kit project.
@@ -331,10 +340,20 @@ Status legend (lifecycle): **undecided** · **needs-info** · **planned** ·
 - **Spec dir:** specs/008-command-contract-hardening/
 - **Notes:** This entry flows forward from the 2026-09-03 review of the current command Markdown. Existing Python path validation remains authoritative. The feature should preserve the determinism split: scripts may expose exact repository state and validation inputs, while command bodies retain synthesis and drift judgment. **Specced 2026-09-03:** the feature specification and quality checklist define the accepted command-contract changes with no unresolved clarification markers. **Implemented 2026-09-03:** all implementation and macOS dogfood tasks passed, and the intended user accepted the command selection, evidence boundaries, debrief provenance, report semantics, and lifecycle guidance. Linux validation is explicitly deferred, so this entry remains implemented rather than verified. See `specs/008-command-contract-hardening/validation-evidence.md`.
 
+### 012 — Rename to FlowKit Roadmap  [status: verified]
+
+- **Description:** Rename this project to **FlowKit Roadmap**, the human-readable name under the FlowKit brand for the spec-kit-flow product group, with project identifier `spec-kit-flow-roadmap`; rename its Spec Kit extension ID from `diagram-roadmap` to `flow-roadmap`.
+- **Outcome:** Current project and extension display names use FlowKit Roadmap; the project identifier uses `spec-kit-flow-roadmap`; the installed extension uses `flow-roadmap`; the four canonical commands use `speckit.flow-roadmap.<purpose>`; and generated skills use `speckit-flow-roadmap-<purpose>`, with each purpose retaining its existing behavior.
+- **Scope (in):** Align current-facing project metadata, extension manifest and installation identity, command IDs and files, generated skills, hooks, configuration names and environment overrides, runtime paths, packaging rules, tests, and documentation with the new identities. Validate installation and command dispatch in a disposable Spec Kit project.
+- **Scope (out):** New roadmap behavior or commands; changes to the separate Spec Kit Flow bundle or The Diagram; rewriting merged feature directories, dated reports, released changelog history, or earlier roadmap entries.
+- **Depends on:** 008 (verified prior identity), 009 (verified Python runtime), 010 (verified project tooling).
+- **Governed by:** C-01, C-03, C-05, C-07, C-08.
+- **Spec dir:** specs/009-rename-flow-roadmap/
+- **Notes:** The project and extension identifiers were explicitly distinguished by the intended user on 2026-09-23. The intended user subsequently selected FlowKit Roadmap as the human-readable name without changing those identifiers. Specify 1.0.1 derives a generated skill name by replacing dots in a canonical `speckit.<extension-id>.<purpose>` command with hyphens, so extension ID `flow-roadmap` produces the requested `speckit-flow-roadmap-<purpose>` skills. The prior `diagram-roadmap` identity remains accepted history in entry 008. Entry 011's deferred Linux verification remains a separate gate. **In progress 2026-09-23:** the intended user explicitly started this feature before specification; the `specced` state was skipped by that requested sequence. The intended user selected documented manual migration that preserves existing configuration. **Verified 2026-09-23:** the specification is Complete, all 36 tasks are checked, the fresh debrief found no roadmap gaps and recommended verification, and all 114 tests passed on macOS. The GitHub repository was renamed by the maintainer; local checkout and worktree directory renames are intentionally deferred until after feature completion. See `specs/009-rename-flow-roadmap/roadmap-reviews/debrief-20260923T154819Z.md`.
+
 ## Open Questions
 
-None. Q1–Q6 were resolved or removed on 2026-08-31; their durable conclusions are
-recorded in the ledger, Constraints & Decisions, and Cross-Cutting Notes.
+Q1–Q6 were resolved or removed on 2026-08-31; their durable conclusions are recorded in the ledger, Constraints & Decisions, and Cross-Cutting Notes. Q7 was resolved on 2026-09-23: existing `diagram-roadmap` installations require a documented manual migration to `flow-roadmap` that preserves configuration.
 
 ## Cross-Cutting Notes
 
@@ -344,7 +363,7 @@ recorded in the ledger, Constraints & Decisions, and Cross-Cutting Notes.
 - **Read-only is the default for reviews.** brief/debrief/sync (003/004/005) must
   emit reports and PROPOSE edits only; only `write` (002) writes, and only the roadmap
   artifact, non-destructively.
-- **Source of truth is the repo root**, mirrored into `.specify/extensions/diagram-roadmap/`
+- **Source of truth is the repo root**, mirrored into `.specify/extensions/flow-roadmap/`
   for the installed/dogfooded copy. Keep both in sync when editing commands/scripts.
 - **Roadmap and spec numbering are independent in the current version.** Existing
   spec directories will not be renumbered. Matching uses explicit `Spec dir`
@@ -360,4 +379,4 @@ recorded in the ledger, Constraints & Decisions, and Cross-Cutting Notes.
 
 ---
 
-**Version**: 2.3.2 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-09-03
+**Version**: 2.4.4 | **Ratified**: 2026-06-24 | **Last Amended**: 2026-09-23

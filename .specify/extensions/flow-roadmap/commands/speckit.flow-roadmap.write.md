@@ -1,7 +1,7 @@
 ---
 description: Create or apply an approved amendment to the durable project spec roadmap after constitution work; do not use for implementation review, status verification, or speculative unattended synthesis.
 scripts:
-  py: .specify/extensions/diagram-roadmap/scripts/python/load_config.py
+  py: .specify/extensions/flow-roadmap/scripts/python/load_config.py
 ---
 
 ## User Input
