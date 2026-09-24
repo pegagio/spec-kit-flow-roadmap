@@ -55,6 +55,8 @@ write them.
 
 ## Install
 
+Maintainers: follow [the release process](RELEASE.md) before tagging a version or handing it to the Spec Kit Flow catalog.
+
 This extension is not in the spec-kit community catalog, so it must be installed from a local checkout:
 
 ```text
