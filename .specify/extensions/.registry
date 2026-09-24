@@ -15,7 +15,12 @@
           "speckit.flow-roadmap.sync"
         ]
       },
-      "registered_skills": [],
+      "registered_skills": [
+        "speckit-flow-roadmap-write",
+        "speckit-flow-roadmap-brief",
+        "speckit-flow-roadmap-debrief",
+        "speckit-flow-roadmap-sync"
+      ],
       "installed_at": "2026-09-23T14:49:38.163036+00:00"
     }
   }
