@@ -4,7 +4,7 @@
     "flow-roadmap": {
       "version": "0.2.0",
       "source": "local",
-      "manifest_hash": "sha256:0194484f54f3a3d8184131cc24b9b94efb1827f5790dd7eabd4a52655ac7a18d",
+      "manifest_hash": "sha256:8f454d97d8b36a15008da81a61876c0dc7864d5a7955f14e6f2c77f9e6b8b083",
       "enabled": true,
       "priority": 10,
       "registered_commands": {
@@ -15,13 +15,8 @@
           "speckit.flow-roadmap.sync"
         ]
       },
-      "registered_skills": [
-        "speckit-flow-roadmap-write",
-        "speckit-flow-roadmap-brief",
-        "speckit-flow-roadmap-debrief",
-        "speckit-flow-roadmap-sync"
-      ],
-      "installed_at": "2026-09-23T14:49:38.163036+00:00"
+      "registered_skills": [],
+      "installed_at": "2026-09-24T16:48:08.303370+00:00"
     }
   }
 }

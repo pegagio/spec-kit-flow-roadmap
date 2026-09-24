@@ -23,7 +23,7 @@ extension:
   name: FlowKit Roadmap
   version: 0.2.0
 requires:
-  speckit_version: '==1.0.1'
+  speckit_version: '>=1.0.10.dev0'
 provides:
   commands: []
 defaults:

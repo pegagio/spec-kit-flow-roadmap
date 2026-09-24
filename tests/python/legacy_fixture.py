@@ -21,7 +21,7 @@ extension:
   license: Apache-2.0
   homepage: https://github.com/pegagio/spec-kit-diagram-roadmap
 requires:
-  speckit_version: '==1.0.1'
+  speckit_version: '>=1.0.10.dev0'
 provides:
   commands:
     - name: speckit.diagram-roadmap.write

@@ -87,7 +87,7 @@ class CurrentSurfaceTest(unittest.TestCase):
                 "python": "3.11.16",
                 "uv": "0.12.5",
                 "pipx:specify-cli": {
-                    "version": "1.0.1",
+                    "version": "1.0.10.dev0+pegagio.2",
                     "depends": ["python", "uv"],
                 },
             },

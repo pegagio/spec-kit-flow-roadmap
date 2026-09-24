@@ -72,8 +72,8 @@ class DisposableInstallationTest(unittest.TestCase):
         self.assertEqual(0, self.install.returncode, self.install.stderr or self.install.stdout)
         self.assertEqual(0, self.enable.returncode, self.enable.stderr or self.enable.stdout)
 
-    def test_manifest_requires_exact_specify_version(self) -> None:
-        self.assertIn("speckit_version: '==1.0.1'", (self.source / "extension.yml").read_text())
+    def test_manifest_requires_supported_specify_version(self) -> None:
+        self.assertIn("speckit_version: '>=1.0.10.dev0'", (self.source / "extension.yml").read_text())
 
     def test_payload_has_exact_twelve_files(self) -> None:
         self.assert_install_succeeded()

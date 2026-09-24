@@ -67,7 +67,7 @@ If you're developing this extension *inside* a spec-kit project, install from a 
 source rather than the repo root — installing a directory into its own
 `.specify/extensions/` will recurse.
 
-Requires Specify CLI 1.0.1 exactly. The extension supports macOS and Linux; Windows support is not a goal. Runtime scripts use the active Specify installation's Python 3.11.16 environment and its PyYAML 6.0-or-newer dependency.
+Requires Specify CLI `>=1.0.10.dev0`; the project's tested build is `1.0.10.dev0+pegagio.2`. The manifest cannot express a minimum local build suffix, so this range also admits other `1.0.10.dev0` builds. The extension supports macOS and Linux; Windows support is not a goal. Runtime scripts use the active Specify installation's Python 3.11.16 environment and its PyYAML 6.0-or-newer dependency.
 
 ## Migrating an existing local installation
 

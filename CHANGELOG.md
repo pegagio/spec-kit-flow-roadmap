@@ -9,6 +9,7 @@ maintained explicitly.
 
 ### Changed
 
+- Raised the Specify CLI compatibility floor to `>=1.0.10.dev0`, including the tested `1.0.10.dev0+pegagio.2` build.
 - Renamed the project and extension display name to FlowKit Roadmap, the project identifier to `spec-kit-flow-roadmap`, the extension ID to `flow-roadmap`, and the command and generated-skill namespaces to `speckit.flow-roadmap.*` and `speckit-flow-roadmap-*`.
 - Renamed the project to Diagram Roadmap, the extension ID to `diagram-roadmap`, and the command namespace to `speckit.diagram-roadmap.*`.
 - Updated the intended repository name to `spec-kit-diagram-roadmap` and aligned installed paths, documentation, and tests with the new extension ID.
